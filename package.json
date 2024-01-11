@@ -1,0 +1,19 @@
+{
+  "name": "framimg",
+  "version": "1.0.0",
+  "description": "Add frames to photos",
+  "author": "gigaturbo <lac.baptiste@pm.me>",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "parcel": "^2.11.0"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "dependencies": {
+    "jimp": "^0.22.10"
+  }
+}

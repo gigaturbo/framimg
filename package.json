@@ -5,7 +5,9 @@
   "author": "gigaturbo <lac.baptiste@pm.me>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "parcel": "^2.11.0"
+    "@parcel/transformer-sass": "^2.11.0",
+    "parcel": "^2.11.0",
+    "sass": "^1.69.7"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "source": "src/index.html",
@@ -14,6 +16,7 @@
     "build": "parcel build"
   },
   "dependencies": {
-    "jimp": "^0.22.10"
+    "jimp": "^0.22.10",
+    "uppload": "^3.2.1"
   }
 }

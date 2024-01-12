@@ -1,9 +1,11 @@
-import { Uppload, Local, Instagram, xhrUploader, en } from "uppload";
+import { Uppload, Local, xhrUploader, en } from "uppload";
 
 const uploader = new Uppload({
     lang: en,
     uploader: xhrUploader({
-        endpoint: "https://example.com/upload"
-    })
+        endpoint: "https://gigaturbo.fr/upload"
+    }),
+    bind: document.querySelector("img.profile-pic"),
+    call: document.querySelector("button.pic-btn")
 });
 uploader.use([new Local()]);

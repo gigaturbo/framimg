@@ -11,43 +11,9 @@
 </head>
 
 <body>
-    <h1>Hello Framimg!</h1>
-    <input type="file" id="file-selector" accept=".jpg, .jpeg, .png">
-    <p id="status"></p>
-    <div>
-        <img id="output" class="responsive-img">
-    </div>
-
-
+    <div id="app"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-        // https://web.dev/articles/read-files?hl=fr
-
-        const status = document.getElementById('status');
-        const output = document.getElementById('output');
-        if (window.FileList && window.File && window.FileReader) {
-            document.getElementById('file-selector').addEventListener('change', event => {
-                output.src = '';
-                status.textContent = '';
-                const file = event.target.files[0];
-                if (!file.type) {
-                    status.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
-                    return;
-                }
-                if (!file.type.match('image.*')) {
-                    status.textContent = 'Error: The selected file does not appear to be an image.'
-                    return;
-                }
-                const reader = new FileReader();
-                reader.addEventListener('load', event => {
-                    output.src = event.target.result;
-                });
-                reader.readAsDataURL(file);
-            });
-        }
-
-    </script>
-
+    <script type="module" src="js/script.js"></script>
 </body>
 
 </html>

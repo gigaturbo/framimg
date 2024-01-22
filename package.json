@@ -5,11 +5,9 @@
   "author": "gigaturbo <lac.baptiste@pm.me>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@parcel/transformer-less": "^2.11.0",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
     "events": "^3.1.0",
-    "less": "^4.2.0",
     "parcel": "^2.11.0",
     "path-browserify": "^1.0.0",
     "stream-browserify": "^3.0.0",

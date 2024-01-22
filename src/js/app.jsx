@@ -1,10 +1,10 @@
 import Canvas from './canvas'
 import { useState } from 'react';
 import { useEffect } from 'react';
-// import { useEffectEvent } from 'react';
 import Image from 'image-js';
 import { styled } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { RotateLeft, Photo } from '@mui/icons-material';
 
@@ -19,33 +19,26 @@ import { RotateLeft, Photo } from '@mui/icons-material';
 
 export function App() {
 
+    const [windowSize, setWindowSize] = useState(getWindowSize());
     const [image, setImage] = useState(null); // IJSImage
     const [file, setFile] = useState(null); // File
     const [isImageLoading, setIsImageLoading] = useState(false) // Boolean
-    const [angle, setAngle] = useState(0); // Number
+    const [imageSettings, setImageSettings] = useState({ zoom: 1, borderSize: 0, ratio: 8 / 5, angle: 0 })
+
+
 
     // EVENTS --------------------------------------------------------------------------------------
 
-    // async image loading
-    // useEffect(() => {
-    //     if (file != null) {
-    //         let worker = new Worker(new URL("load_image.jsx", import.meta.url), { type: 'module' });
-    //         worker.postMessage(file);
-    //         setIsImageLoading(true)
-    //         worker.onmessage = function (event) {
-    //             console.log("Main thread received" + event.data);
-    //             let limg = Image.bind(event.data)
-    //             if (limg != null) {
-    //                 setImage(limg)
-    //                 setIsImageLoading(false)
-    //             }
-    //         };
-    //         worker.onerror = function (e) {
-    //             console.log("Main thread received error");
-    //             setIsImageLoading(false)
-    //         };
-    //     }
-    // }, [file])
+    useEffect(() => {
+        function handleWindowResize() {
+            const ws = getWindowSize()
+            setWindowSize(ws);
+        }
+        window.addEventListener('resize', handleWindowResize);
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+    }, []);
 
     // handle file change
     function handleFileChange(e) {
@@ -53,36 +46,42 @@ export function App() {
         const reader = new FileReader();
         reader.addEventListener('load', event => {
             Image.load(event.target.result).then(function (i) {
-                setImage(i.resize({ width: 256 }))
+                setImage(i)
+                setIsImageLoading(false)
             });
         });
+        setIsImageLoading(true)
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    // handle angle change
-    const handleAngleChange = (e, v) => {
-        setAngle(v);
-    };
+
+    const handleImageSettingsChanged = (e, keyToUpdate) => {
+        let settings = { ...imageSettings }
+        settings[keyToUpdate] = e.target.value
+        setImageSettings(settings)
+    }
 
     // HTML ----------------------------------------------------------------------------------------
 
     function getFileNameText(f) {
         if (f == null) {
-            return '-'
+            return ' - '
         }
         return f.name
     }
 
     return (
-        <>
-            <h3>framimg</h3>
-            <ImageInputButton loading={isImageLoading} onChange={handleFileChange} />
-            <p>{getFileNameText(file)}</p>
-            <div className="responsive-img">
-                <ImageCanvas img={image} angle={angle} />
-            </div>
-            <SliderRotate angle={angle} onChange={handleAngleChange} />
-        </>
+        <div style={{ backgroundColor: '#AAAAAA' }}>
+            <Stack spacing={2}>
+                <h3>framimg</h3>
+                <ImageInputButton loading={isImageLoading} onChange={handleFileChange} />
+                <p>{getFileNameText(file)}</p>
+                <ImageCanvas image={image} imageSettings={imageSettings} windowSize={windowSize} />
+                {/* <SliderRotate angle={angle} onChange={handleAngleChange} /> */}
+                <SliderBorderSize imageSettings={imageSettings} onChange={(e) => handleImageSettingsChanged(e, "borderSize")}
+                />
+            </Stack>
+        </div>
     );
 
 }
@@ -106,9 +105,34 @@ function SliderRotate({ angle, onChange }) {
     );
 }
 
-function ImageCanvas({ img: image, angle }) {
+function SliderBorderSize({ imageSettings, onChange }) {
+    return (<>
+        {/* <RotateLeft /> */}
+        <Slider
+            defaultValue={0}
+            min={0}
+            max={50}
+            aria-label="Default"
+            valueLabelDisplay="auto"
+            value={imageSettings.borderSize}
+            getAriaValueText={(v) => { `${v}%` }}
+            onChange={onChange}
+        />
+    </>
+    );
+}
+
+function ImageCanvas({ image, imageSettings, windowSize }) {
     if (image != null) {
-        return (<Canvas img={image} angle={angle} width={300} height={300} />)
+        return (
+            <>
+                <Canvas
+                    image={image}
+                    imageSettings={imageSettings}
+                    width={windowSize.innerWidth}
+                    height={windowSize.innerHeight} />
+            </>
+        )
     }
     else { return (<></>) }
 }
@@ -139,3 +163,9 @@ const VisuallyHiddenInput = styled('input')({
     whiteSpace: 'nowrap',
     width: 1,
 });
+
+
+function getWindowSize() {
+    const { innerWidth, innerHeight } = window;
+    return { innerWidth, innerHeight };
+}

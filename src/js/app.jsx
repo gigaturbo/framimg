@@ -26,7 +26,7 @@ export function App() {
     const [imageSettings, setImageSettings] = useState({
         zoom: 1,
         borderSize: 0,
-        ratio: 5 / 5,
+        ratio: 5 / 4,
         angle: 0,
         ratioMode: 'OUTPUT_RATIO'
     })
@@ -80,9 +80,12 @@ export function App() {
                 <ImageInputButton loading={isImageLoading} onChange={handleFileChange} />
                 <p>{getFileNameText(file)}</p>
                 <ImageCanvas image={image} imageSettings={imageSettings} windowSize={windowSize} />
-                {/* <SliderRotate angle={angle} onChange={handleAngleChange} /> */}
-                <SliderBorderSize imageSettings={imageSettings} onChange={(e) => handleImageSettingsChanged(e, "borderSize")}
-                />
+                <SliderBorderSize
+                    imageSettings={imageSettings}
+                    onChange={(e) => handleImageSettingsChanged(e, "borderSize")} />
+                <SliderZoom
+                    imageSettings={imageSettings}
+                    onChange={(e) => handleImageSettingsChanged(e, "zoom")} />
             </Stack>
         </div>
     );
@@ -115,10 +118,30 @@ function SliderBorderSize({ imageSettings, onChange }) {
             defaultValue={0}
             min={0}
             max={50}
+            step={1}
+            marks
             aria-label="Default"
             valueLabelDisplay="auto"
             value={imageSettings.borderSize}
             getAriaValueText={(v) => { `${v}%` }}
+            onChange={onChange}
+        />
+    </>
+    );
+}
+
+function SliderZoom({ imageSettings, onChange }) {
+    return (<>
+        {/* <RotateLeft /> */}
+        <Slider
+            defaultValue={1}
+            min={1}
+            max={2}
+            step={0.01}
+            aria-label="Default"
+            valueLabelDisplay="auto"
+            value={imageSettings.zoom}
+            getAriaValueText={(v) => { `${parseInt(v * 100)}%` }}
             onChange={onChange}
         />
     </>

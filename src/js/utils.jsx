@@ -28,37 +28,19 @@ export const getProcessedImage = (image, imageSettings) => {
 
         let limg
 
-        // const ratio = getBorderParameters(
-        //     percentBorderWidth = imageSettings.borderSize,
-        //     inputRatio = image.width / image.height,
-        //     outputRatio = imageSettings.ratio)
-        const b = imageSettings.borderSize
-        const oR = imageSettings.ratio
-        const cR = (1 - b / 100) / (1 / oR - b / 100)
+        let params = getProcessingParameters(image, imageSettings)
 
-        // console.log(`W=${image.width} H=${image.height} iR=${image.width / image.height}`)
-        // console.log(` m=${imageSettings.borderSize / 100} oR=${oR} cR=${cR}`)
 
-        // Crop to obtain working ratio
-        if (cR < image.width / image.height) {
-            const cW = parseInt(image.height * cR)
-            const dx = parseInt(image.width - cW)
-            console.log(` dx=${dx}`)
-            limg = image.crop({ x: dx / 2, y: 0, width: cW, height: image.height })
-        } else {
-            const cH = parseInt(image.width / cR)
-            const dy = parseInt(image.height - cH)
-            console.log(` dy=${dy}`)
-            limg = image.crop({ x: 0, y: dy / 2, width: image.width, height: cH })
-        }
+        limg = image.crop({
+            x: 0,
+            y: 0,
+            width: image.width - params.dx,
+            height: image.height - params.dy
+        })
 
-        // Add border
-        const padPx = parseInt((b * limg.width / 100) / (2 - b / 50))
-        // console.log(` Padding=${padPx}`)
-        limg = limg.pad({ size: padPx, algorithm: "set", color: [255, 255, 255, 255] })
 
-        // Done
-        // console.log(` Real output ratio = ${limg.width / limg.height}`)
+        limg = limg.pad({ size: params.pad, algorithm: "set", color: [255, 255, 255, 255] })
+
         return (limg)
 
     }
@@ -71,32 +53,38 @@ const getProcessingParameters = (image, imageSettings) => {
     let dx = 0
     let dy = 0
     let pad = 0
-    let cR = image.width / image.heights
+    let cR = image.width / image.height
 
     if (imageSettings.ratioMode === "OUTPUT_RATIO") {
-
-        let limg
 
         const b = imageSettings.borderSize
         const oR = imageSettings.ratio
         const cR = (1 - b / 100) / (1 / oR - b / 100)
 
+        // Ratio is now fixed
         if (cR < image.width / image.height) {
             const cW = parseInt(image.height * cR)
-            const dx = parseInt(image.width - cW)
-            limg = image.crop({ x: dx / 2, y: 0, width: cW, height: image.height })
+            dx += parseInt(image.width - cW)
         } else {
             const cH = parseInt(image.width / cR)
-            const dy = parseInt(image.height - cH)
-            limg = image.crop({ x: 0, y: dy / 2, width: image.width, height: cH })
+            dy += parseInt(image.height - cH)
         }
 
-        pad = parseInt((b * limg.width / 100) / (2 - b / 50))
+        // Zoom *proportional* to ratio
+        dx += (image.width - dx) - parseInt((image.width - dx) / imageSettings.zoom)
+        dy += (image.height - dy) - parseInt((image.height - dy) / imageSettings.zoom)
 
-        limg = limg.pad({ size: pad })
-        return (limg)
+        // Padding relative to new width
+        pad = parseInt((b * parseInt((image.height - dy) * cR) / 100) / (2 - b / 50))
+
+        // Security
+        dx = Math.max(Math.min(dx, image.width - 1), 1)
+        dy = Math.max(Math.min(dy, image.height - 1), 1)
+        pad = Math.max(pad, 0)
 
     }
+
+    return ({ cR: cR, dx: dx, dy: dy, pad: pad })
 
 }
 

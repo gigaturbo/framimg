@@ -1,11 +1,11 @@
 import Canvas from './canvas'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import Image from 'image-js';
+import { Image } from 'image-js';
 import { styled } from '@mui/material/styles';
-import Slider from '@mui/material/Slider';
-import Stack from '@mui/material/Stack';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { Slider } from '@mui/material';
+import { Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { RotateLeft, Photo } from '@mui/icons-material';
 
 // https://www.digitalocean.com/community/tutorials/how-to-handle-async-data-loading-lazy-loading-and-code-splitting-with-react
@@ -20,12 +20,16 @@ import { RotateLeft, Photo } from '@mui/icons-material';
 export function App() {
 
     const [windowSize, setWindowSize] = useState(getWindowSize());
-    const [image, setImage] = useState(null); // IJSImage
     const [file, setFile] = useState(null); // File
     const [isImageLoading, setIsImageLoading] = useState(false) // Boolean
-    const [imageSettings, setImageSettings] = useState({ zoom: 1, borderSize: 0, ratio: 8 / 5, angle: 0 })
-
-
+    const [image, setImage] = useState(null); // IJSImage
+    const [imageSettings, setImageSettings] = useState({
+        zoom: 1,
+        borderSize: 0,
+        ratio: 5 / 5,
+        angle: 0,
+        ratioMode: 'OUTPUT_RATIO'
+    })
 
     // EVENTS --------------------------------------------------------------------------------------
 
@@ -46,14 +50,13 @@ export function App() {
         const reader = new FileReader();
         reader.addEventListener('load', event => {
             Image.load(event.target.result).then(function (i) {
-                setImage(i)
+                setImage(i.resize({ width: 1024 }))
                 setIsImageLoading(false)
             });
         });
         setIsImageLoading(true)
         reader.readAsDataURL(e.target.files[0]);
     }
-
 
     const handleImageSettingsChanged = (e, keyToUpdate) => {
         let settings = { ...imageSettings }

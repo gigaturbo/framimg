@@ -1,21 +1,13 @@
 import Canvas from './canvas'
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Image } from 'image-js';
 import { styled } from '@mui/material/styles';
 import { Slider } from '@mui/material';
 import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { RotateLeft, Photo } from '@mui/icons-material';
+import { Photo } from '@mui/icons-material';
+import { getProcessingParameters } from './utils'
 
-// https://www.digitalocean.com/community/tutorials/how-to-handle-async-data-loading-lazy-loading-and-code-splitting-with-react
-// https://www.w3schools.com/js/js_api_web_workers.asp
-// https://parceljs.org/languages/javascript/#web-workers
-// https://mui.com/material-ui/
-// https://mui.com/material-ui/material-icons/?query=image
-// https://flow.org/
-// https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage
-// https://stackoverflow.com/questions/23268322/how-to-load-images-using-web-worker
 
 export function App() {
 
@@ -26,13 +18,15 @@ export function App() {
     const [imageSettings, setImageSettings] = useState({
         zoom: 1,
         borderSize: 0,
-        ratio: 5 / 4,
+        ratio: 8 / 8,
         angle: 0,
-        ratioMode: 'OUTPUT_RATIO'
+        ratioMode: 'OUTPUT_RATIO',
+        translation: { x: 0, y: 0 }
     })
 
     // EVENTS --------------------------------------------------------------------------------------
 
+    // Window resize
     useEffect(() => {
         function handleWindowResize() {
             const ws = getWindowSize()
@@ -44,8 +38,9 @@ export function App() {
         };
     }, []);
 
-    // handle file change
-    function handleFileChange(e) {
+
+    // File change
+    const handleFileChange = (e) => {
         setFile(e.target.files[0])
         const reader = new FileReader();
         reader.addEventListener('load', event => {
@@ -58,11 +53,24 @@ export function App() {
         reader.readAsDataURL(e.target.files[0]);
     }
 
+
+    // Settings changed
     const handleImageSettingsChanged = (e, keyToUpdate) => {
         let settings = { ...imageSettings }
         settings[keyToUpdate] = e.target.value
         setImageSettings(settings)
     }
+
+
+    // Image dragging
+    const handleImageDrag = (tx, ty) => {
+        let nSettings = { ...imageSettings }
+        nSettings.translation.x = tx
+        nSettings.translation.y = ty
+
+        setImageSettings(nSettings)
+    }
+
 
     // HTML ----------------------------------------------------------------------------------------
 
@@ -79,7 +87,11 @@ export function App() {
                 <h3>framimg</h3>
                 <ImageInputButton loading={isImageLoading} onChange={handleFileChange} />
                 <p>{getFileNameText(file)}</p>
-                <ImageCanvas image={image} imageSettings={imageSettings} windowSize={windowSize} />
+                <ImageCanvas
+                    image={image}
+                    imageSettings={imageSettings}
+                    windowSize={windowSize}
+                    onImageDrag={handleImageDrag} />
                 <SliderBorderSize
                     imageSettings={imageSettings}
                     onChange={(e) => handleImageSettingsChanged(e, "borderSize")} />
@@ -93,23 +105,6 @@ export function App() {
 }
 
 // ELEMENTS ----------------------------------------------------------------------------------------
-
-function SliderRotate({ angle, onChange }) {
-    return (<>
-        <RotateLeft />
-        <Slider
-            defaultValue={0}
-            min={-180}
-            max={180}
-            aria-label="Default"
-            valueLabelDisplay="auto"
-            value={angle}
-            getAriaValueText={(v) => { `${v} degres` }}
-            onChange={onChange}
-        />
-    </>
-    );
-}
 
 function SliderBorderSize({ imageSettings, onChange }) {
     return (<>
@@ -148,16 +143,15 @@ function SliderZoom({ imageSettings, onChange }) {
     );
 }
 
-function ImageCanvas({ image, imageSettings, windowSize }) {
+function ImageCanvas({ image, imageSettings, windowSize, onImageDrag }) {
     if (image != null) {
         return (
-            <>
-                <Canvas
-                    image={image}
-                    imageSettings={imageSettings}
-                    width={windowSize.innerWidth}
-                    height={windowSize.innerHeight} />
-            </>
+            <Canvas
+                image={image}
+                imageSettings={imageSettings}
+                width={windowSize.innerWidth}
+                height={windowSize.innerHeight}
+                onImageDrag={onImageDrag} />
         )
     }
     else { return (<></>) }

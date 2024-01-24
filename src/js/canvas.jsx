@@ -1,45 +1,68 @@
-import React, { useRef, useEffect } from 'react'
-import { getProcessedImage } from './utils'
+import { useRef, useEffect } from 'react'
+import { getProcessedImage, getProcessingParameters } from './utils'
 
-//  https://medium.com/@pdx.lucasm/canvas-with-react-js-32e133c05258
+export default Canvas = props => {
 
-
-const Canvas = props => {
-
-    const { image, imageSettings, width, height, ...other } = props
+    const { image, imageSettings, width, height, onImageDrag, ...other } = props
     const canvasRef = useRef(null)
+    const isMouseDown = useRef(null)
+    const mouseInitialPosition = useRef(null)
+    const previousTranslation = useRef({ x: 0, y: 0 })
+
 
     function handleMouseMove(e) {
-        if (canvasRef != null) {
-            if (e.buttons === 1) {
-                const c = canvasRef.current;
-                const pos = getMousePos(c, e);
-                console.log('Mouse position: ' + pos.x + ',' + pos.y);
-                console.log('Buttons: ' + e.buttons);
-            }
+        if (canvasRef != null && mouseInitialPosition.current && e.buttons === 1 && isMouseDown.current) {
+            const { ttx, tty } = getTranslation(image, imageSettings, e)
+            onImageDrag(ttx, tty)
         }
     }
+
+
+    function handleMouseUpOrLeave(e) {
+        if (canvasRef != null && mouseInitialPosition.current) {
+            isMouseDown.current = false
+            const { ttx, tty } = getTranslation(image, imageSettings, e)
+            previousTranslation.current.x = ttx
+            previousTranslation.current.y = tty
+            mouseInitialPosition.current = null
+            onImageDrag(ttx, tty)
+        }
+    }
+
+
+    function handleMouseDown(e) {
+        isMouseDown.current = true
+        mouseInitialPosition.current = { x: e.offsetX, y: e.offsetY }
+    }
+
+
+    const getTranslation = (image, imageSettings, e) => {
+        const params = getProcessingParameters(image, imageSettings)
+        const canvasZoom = params.totalWidth / width
+        const imageZoom = imageSettings.zoom
+        const dx = - (e.offsetX - mouseInitialPosition.current.x)
+        const dy = - (e.offsetY - mouseInitialPosition.current.y)
+        ttx = parseInt(dx * canvasZoom + previousTranslation.current.x)
+        tty = parseInt(dy * canvasZoom + previousTranslation.current.y)
+        ttx = Math.max(Math.min(ttx, params.dx), 0)
+        tty = Math.max(Math.min(tty, params.dy), 0)
+        return ({ ttx, tty })
+    }
+
 
     useEffect(() => {
 
         const context = canvasRef.current.getContext('2d')
         canvasRef.current.onmousemove = handleMouseMove;
+        canvasRef.current.onmousedown = handleMouseDown;
+        canvasRef.current.onmouseup = handleMouseUpOrLeave;
+        canvasRef.current.onmouseleave = handleMouseUpOrLeave;
 
         const limg = getProcessedImage(image, imageSettings).resize({ width: width })
         const data = new ImageData(limg.getRGBAData({ clamped: true }), limg.width, limg.height);
         context.putImageData(data, 0, 0);
 
-    }, [image, imageSettings, width, height])
+    }, [image, imageSettings, width, height, onImageDrag])
 
     return <canvas ref={canvasRef} width={width} height={width / imageSettings.ratio} {...other} />
-}
-
-export default Canvas
-
-function getMousePos(canvas, e) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-    };
 }

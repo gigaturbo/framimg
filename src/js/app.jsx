@@ -2,15 +2,33 @@ import Canvas from './canvas'
 import { useState, useEffect, useRef } from 'react';
 import { Image } from 'image-js';
 import { styled } from '@mui/material/styles';
-import { Slider } from '@mui/material';
-import { Stack } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import { Photo } from '@mui/icons-material';
+import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import LineWeightIcon from '@mui/icons-material/LineWeight';
+import ImageIcon from '@mui/icons-material/Image';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+
+import Grid from '@mui/material/Unstable_Grid2';
+import Box from '@mui/material/Box';
+
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 
 
 export function App() {
 
-    const [windowSize, setWindowSize] = useState(getWindowSize());
+    const [canvasSize, setCanvasSize] = useState({ w: 0, h: 0 });
     const [file, setFile] = useState(null); // File
     const [isImageLoading, setIsImageLoading] = useState(false) // Boolean
     const [image, setImage] = useState(null); // IJSImage
@@ -23,15 +41,19 @@ export function App() {
         translation: { x: 0, y: 0 }
     })
 
+    const canvasGridContainerRef = useRef(null)
+
     // EVENTS --------------------------------------------------------------------------------------
 
     // Window resize
     useEffect(() => {
         function handleWindowResize() {
-            const ws = getWindowSize()
-            setWindowSize(ws);
+            const w = canvasGridContainerRef.current.offsetWidth
+            const h = canvasGridContainerRef.current.offsetHeight
+            setCanvasSize({ w: w, h: h });
         }
         window.addEventListener('resize', handleWindowResize);
+        handleWindowResize()
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         };
@@ -89,75 +111,115 @@ export function App() {
     }
 
     return (
-        <div style={{ backgroundColor: '#AAAAAA' }}>
-            <Stack spacing={2}>
-                <h3>framimg</h3>
-                <ImageInputButton loading={isImageLoading} onChange={handleFileChange} />
-                <p>{getFileNameText(file)}</p>
-                <ImageCanvas
-                    image={image}
-                    imageSettings={imageSettings}
-                    windowSize={windowSize}
-                    onImageDrag={handleImageDrag} />
-                <SliderBorderSize
-                    imageSettings={imageSettings}
-                    onChange={(e) => handleImageSettingsChanged(e, "borderSize")} />
-                <SliderZoom
-                    imageSettings={imageSettings}
-                    onChange={(e) => handleZoomChanged(e)} />
-            </Stack>
-        </div>
-    );
+        <Box sx={{ flexGrow: 1 }} >
+            <Grid container sx={{ backgroundColor: "#666666" }}>
 
+                <Grid xs={12}>
+                    <MainAppBar loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />} />
+                </Grid>
+
+                <Grid xs={12} container spacing={2} >
+
+                    <Grid xs={12} ref={canvasGridContainerRef}>
+                        <ImageCanvas
+                            image={image}
+                            imageSettings={imageSettings}
+                            canvasSize={canvasSize}
+                            onImageDrag={handleImageDrag} />
+                    </Grid>
+
+                    <Grid xs={12} container sx={{ px: '1.5rem', py: '1rem' }} >
+                        <Grid xs={12}>
+                            <SliderBorderSize
+                                imageSettings={imageSettings}
+                                onChange={(e) => handleImageSettingsChanged(e, "borderSize")} />
+                        </Grid>
+
+                        <Grid xs={12}>
+                            <SliderZoom
+                                imageSettings={imageSettings}
+                                onChange={(e) => handleZoomChanged(e)} />
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </Grid >
+        </Box >
+    );
 }
 
 // ELEMENTS ----------------------------------------------------------------------------------------
 
+function MainAppBar({ loadButton }) {
+    return (
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Framimg
+                    </Typography>
+                    {loadButton}
+                </Toolbar>
+            </AppBar>
+        </Box>
+    )
+}
+
 function SliderBorderSize({ imageSettings, onChange }) {
-    return (<>
-        {/* <RotateLeft /> */}
-        <Slider
-            defaultValue={0}
-            min={0}
-            max={50}
-            step={1}
-            marks
-            aria-label="Default"
-            valueLabelDisplay="auto"
-            value={imageSettings.borderSize}
-            getAriaValueText={(v) => { `${v}%` }}
-            onChange={onChange}
-        />
-    </>
+    return (
+        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <LineWeightIcon />
+            <Slider
+                defaultValue={0}
+                min={0}
+                max={50}
+                step={1}
+                marks
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                value={imageSettings.borderSize}
+                getAriaValueText={(v) => { `${v}%` }}
+                onChange={onChange}
+            />
+        </Stack>
     );
 }
 
 function SliderZoom({ imageSettings, onChange }) {
-    return (<>
-        {/* <RotateLeft /> */}
-        <Slider
-            defaultValue={1}
-            min={1}
-            max={3}
-            step={0.01}
-            aria-label="Default"
-            valueLabelDisplay="auto"
-            value={imageSettings.zoom}
-            getAriaValueText={(v) => { `${parseInt(v * 100)}%` }}
-            onChange={onChange}
-        />
-    </>
+    return (
+        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <ZoomInIcon />
+            <Slider
+                defaultValue={1}
+                min={1}
+                max={3}
+                step={0.01}
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                value={imageSettings.zoom}
+                getAriaValueText={(v) => { `${parseInt(v * 100)}%` }}
+                onChange={onChange}
+            />
+        </Stack>
     );
 }
 
-function ImageCanvas({ image, imageSettings, windowSize, onImageDrag }) {
+function ImageCanvas({ image, imageSettings, canvasSize, onImageDrag }) {
     if (image != null) {
         return (
             <Canvas
                 image={image}
                 imageSettings={imageSettings}
-                width={windowSize.innerWidth}
-                height={windowSize.innerHeight}
+                canvasSize={canvasSize}
                 onImageDrag={onImageDrag} />
         )
     }
@@ -166,16 +228,14 @@ function ImageCanvas({ image, imageSettings, windowSize, onImageDrag }) {
 
 function ImageInputButton({ loading, onChange }) {
     return (
-        <LoadingButton
-            loading={loading}
-            loadingPosition="start"
-            component="label"
-            variant="contained"
-            startIcon={<Photo />}
-        >
-            Load photo
-            <VisuallyHiddenInput type="file" accept=".jpg, .jpeg, .png" onChange={onChange} disabled={loading} />
-        </LoadingButton>
+        <IconButton aria-label="load image" component="label">
+            <ImageIcon color="contrastText" />
+            <VisuallyHiddenInput
+                type="file"
+                accept=".jpg, .jpeg, .png"
+                onChange={onChange}
+                disabled={loading} />
+        </IconButton >
     );
 }
 
@@ -192,7 +252,3 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 
-function getWindowSize() {
-    const { innerWidth, innerHeight } = window;
-    return { innerWidth, innerHeight };
-}

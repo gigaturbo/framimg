@@ -36,7 +36,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage
 https://stackoverflow.com/questions/23268322/how-to-load-images-using-web-worker
 https://medium.com/@pdx.lucasm/canvas-with-react-js-32e133c05258
 https://stackoverflow.com/questions/5789239/calculate-largest-inscribed-rectangle-in-a-rotated-rectangle#7513445
-
+https://stackoverflow.com/questions/65815511/make-child-of-material-ui-grid-item-stretch-to-fit-the-remaining-height-of-the-p
 
 pilege
 imageSettings    : border | out_ratio | zoom

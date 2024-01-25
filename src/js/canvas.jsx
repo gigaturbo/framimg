@@ -3,7 +3,7 @@ import { getProcessedImage, getProcessingParameters } from './utils'
 
 export default Canvas = props => {
 
-    const { image, imageSettings, width, height, onImageDrag, ...other } = props
+    const { image, imageSettings, canvasSize, onImageDrag, ...other } = props
     const canvasRef = useRef(null)
     const isMouseDown = useRef(null)
     const mouseInitialPosition = useRef(null)
@@ -38,7 +38,7 @@ export default Canvas = props => {
 
     const getTranslation = (image, imageSettings, e) => {
         const params = getProcessingParameters(image, imageSettings)
-        const canvasZoom = params.totalWidth / width
+        const canvasZoom = params.totalWidth / canvasSize.w
         const dx = - (e.offsetX - mouseInitialPosition.current.x)
         const dy = - (e.offsetY - mouseInitialPosition.current.y)
         ttx = parseInt(dx * canvasZoom + previousTranslation.current.x)
@@ -61,11 +61,15 @@ export default Canvas = props => {
         canvasRef.current.onmouseup = handleMouseUpOrLeave;
         canvasRef.current.onmouseleave = handleMouseUpOrLeave;
 
-        const limg = getProcessedImage(image, imageSettings).resize({ width: width })
+        const limg = getProcessedImage(image, imageSettings).resize({ width: canvasSize.w })
         const data = new ImageData(limg.getRGBAData({ clamped: true }), limg.width, limg.height);
         context.putImageData(data, 0, 0);
 
-    }, [image, imageSettings, width, height, onImageDrag])
+    }, [image, imageSettings, canvasSize, onImageDrag])
 
-    return <canvas ref={canvasRef} width={width} height={width / imageSettings.ratio} {...other} />
+    return <canvas
+        ref={canvasRef}
+        width={canvasSize.w}
+        height={canvasSize.w / imageSettings.ratio}
+        {...other} />
 }

@@ -8,8 +8,8 @@ export const getProcessedImage = (image, imageSettings) => {
 
         //  Ratio + Zoom + Translate
         let limg = image.crop({
-            x: params.ctx,
-            y: params.cty,
+            x: params.ctx + params.dx / 2,
+            y: params.cty + params.dy / 2,
             width: params.innerWidth,
             height: params.innerHeight
         })
@@ -18,7 +18,6 @@ export const getProcessedImage = (image, imageSettings) => {
         limg = limg.pad({ size: params.pad, algorithm: "set", color: [255, 255, 255, 255] })
 
         return (limg)
-
     }
 
     return (image)
@@ -56,10 +55,6 @@ export const getProcessingParameters = (image, imageSettings) => {
         dx += (image.width - dx) - parseInt((image.width - dx) / imageSettings.zoom)
         dy += (image.height - dy) - parseInt((image.height - dy) / imageSettings.zoom)
 
-        // Corrected translations
-        ctx = Math.max(Math.min(imageSettings.translation.x, dx), 0)
-        cty = Math.max(Math.min(imageSettings.translation.y, dy), 0)
-
         // Padding relative to new width
         pad = parseInt((b * parseInt((image.height - dy) * cR) / 100) / (2 - b / 50))
 
@@ -69,9 +64,13 @@ export const getProcessingParameters = (image, imageSettings) => {
         totalWidth = innerWidth + pad * 2
         totalHeight = innerHeight + pad * 2
 
+        // Corrected translations
+        ctx = Math.max(Math.min(imageSettings.translation.x, dx / 2), -dx / 2)
+        cty = Math.max(Math.min(imageSettings.translation.y, dy / 2), -dy / 2)
+
         // Security
-        dx = Math.max(Math.min(dx, image.width - 1), 1)
-        dy = Math.max(Math.min(dy, image.height - 1), 1)
+        dx = Math.max(Math.min(dx, image.width), 0)
+        dy = Math.max(Math.min(dy, image.height), 0)
         pad = Math.max(pad, 0)
 
     }

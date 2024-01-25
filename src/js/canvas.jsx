@@ -39,13 +39,16 @@ export default Canvas = props => {
     const getTranslation = (image, imageSettings, e) => {
         const params = getProcessingParameters(image, imageSettings)
         const canvasZoom = params.totalWidth / width
-        const imageZoom = imageSettings.zoom
         const dx = - (e.offsetX - mouseInitialPosition.current.x)
         const dy = - (e.offsetY - mouseInitialPosition.current.y)
         ttx = parseInt(dx * canvasZoom + previousTranslation.current.x)
         tty = parseInt(dy * canvasZoom + previousTranslation.current.y)
-        ttx = Math.max(Math.min(ttx, params.dx), 0)
-        tty = Math.max(Math.min(tty, params.dy), 0)
+        const minx = -params.dx / 2
+        const maxx = params.dx / 2
+        const miny = -params.dy / 2
+        const maxy = params.dy / 2
+        ttx = Math.max(Math.min(ttx, maxx), minx)
+        tty = Math.max(Math.min(tty, maxy), miny)
         return ({ ttx, tty })
     }
 

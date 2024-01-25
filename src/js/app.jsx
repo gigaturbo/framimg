@@ -6,7 +6,6 @@ import { Slider } from '@mui/material';
 import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Photo } from '@mui/icons-material';
-import { getProcessingParameters } from './utils'
 
 
 export function App() {
@@ -18,7 +17,7 @@ export function App() {
     const [imageSettings, setImageSettings] = useState({
         zoom: 1,
         borderSize: 0,
-        ratio: 8 / 8,
+        ratio: 8 / 5,
         angle: 0,
         ratioMode: 'OUTPUT_RATIO',
         translation: { x: 0, y: 0 }
@@ -45,7 +44,7 @@ export function App() {
         const reader = new FileReader();
         reader.addEventListener('load', event => {
             Image.load(event.target.result).then(function (i) {
-                setImage(i.resize({ width: 1024 }))
+                setImage(i.resize({ width: 2048 }))
                 setIsImageLoading(false)
             });
         });
@@ -58,6 +57,14 @@ export function App() {
     const handleImageSettingsChanged = (e, keyToUpdate) => {
         let settings = { ...imageSettings }
         settings[keyToUpdate] = e.target.value
+        setImageSettings(settings)
+    }
+
+
+    // Zoom changed
+    const handleZoomChanged = (e) => {
+        let settings = { ...imageSettings }
+        settings.zoom = e.target.value
         setImageSettings(settings)
     }
 
@@ -97,7 +104,7 @@ export function App() {
                     onChange={(e) => handleImageSettingsChanged(e, "borderSize")} />
                 <SliderZoom
                     imageSettings={imageSettings}
-                    onChange={(e) => handleImageSettingsChanged(e, "zoom")} />
+                    onChange={(e) => handleZoomChanged(e)} />
             </Stack>
         </div>
     );
@@ -131,7 +138,7 @@ function SliderZoom({ imageSettings, onChange }) {
         <Slider
             defaultValue={1}
             min={1}
-            max={2}
+            max={3}
             step={0.01}
             aria-label="Default"
             valueLabelDisplay="auto"

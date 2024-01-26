@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { getProcessedImage, getProcessingParameters } from './utils'
 
-export default Canvas = props => {
+export default function Canvas(props) {
 
     const { image, imageSettings, canvasSize, onImageDrag, ...other } = props
     const canvasRef = useRef(null)

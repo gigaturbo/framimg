@@ -1,4 +1,4 @@
-import Canvas from './canvas'
+import React from "react";
 import { useState, useEffect, useRef } from 'react';
 import { Image } from 'image-js';
 import { styled } from '@mui/material/styles';
@@ -18,12 +18,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import Box from '@mui/material/Box';
+import Canvas from './canvas.jsx'
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
 
 
 export function App() {
@@ -112,7 +112,7 @@ export function App() {
 
     return (
         <Box sx={{ flexGrow: 1 }} >
-            <Grid container sx={{ backgroundColor: "#666666" }}>
+            <Grid container sx={{ backgroundColor: "#666666" }} >
 
                 <Grid xs={12}>
                     <MainAppBar loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />} />

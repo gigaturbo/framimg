@@ -14,6 +14,10 @@ import ImageIcon from '@mui/icons-material/Image';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import AspectRatioIcon from '@mui/icons-material/AspectRatio';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
+import { getProcessedImage } from './utils'
 
 import Grid from '@mui/material/Unstable_Grid2';
 import Box from '@mui/material/Box';
@@ -32,7 +36,7 @@ export function App() {
     const [image, setImage] = useState(null); // IJSImage
     const [imageSettings, setImageSettings] = useState({
         zoom: 1,
-        borderSize: 0,
+        borderSize: 10,
         ratio: 8 / 5,
         angle: 0,
         ratioMode: 'OUTPUT_RATIO',
@@ -65,6 +69,7 @@ export function App() {
         reader.addEventListener('load', event => {
             Image.load(event.target.result).then(function (i) {
                 setImage(i.resize({ width: 2048 }))
+                // setImage(i)
                 setIsImageLoading(false)
             });
         });
@@ -98,53 +103,74 @@ export function App() {
         setImageSettings(nSettings)
     }
 
+    const handleDownload = (e) => {
+        const link = document.createElement('a');
+        link.download = 'image';
+        link.href = getProcessedImage(image, imageSettings).toDataURL();
+        link.click();
+    };
+
+
 
     // HTML ----------------------------------------------------------------------------------------
 
 
     return (
-        <Box sx={{ flexGrow: 1 }}  >
-            <Grid container sx={{ backgroundColor: "#666666" }} disableEqualOverflow>
-
+        <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100vh",
+            backgroundColor: "#666666"
+        }}>
+            <Grid container disableEqualOverflow>
                 <Grid xs={12}>
-                    <MainAppBar loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />} />
+                    <MainAppBar
+                        loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />}
+                        downloadButton={<ImageDownloadButton disabled={isImageLoading || image === null} onClick={handleDownload} />}
+                    />
                 </Grid>
+            </Grid>
 
-                <Grid xs={12} container spacing={2} >
+            <Box ref={canvasGridContainerRef}>
+                <ImageCanvas
+                    image={image}
+                    imageSettings={imageSettings}
+                    canvasSize={canvasSize}
+                    onImageDrag={handleImageDrag} />
+            </Box>
 
-                    <Grid xs={12} >
-                        <Box ref={canvasGridContainerRef}>
-                            <ImageCanvas
-                                image={image}
-                                imageSettings={imageSettings}
-                                canvasSize={canvasSize}
-                                onImageDrag={handleImageDrag} />
-                        </Box>
+            <Box sx={{ marginTop: "auto" }}></Box>
+
+            <Grid xs={12} container spacing={2}>
+                <Grid xs={12} container sx={{ px: '1.5rem', py: '2rem' }} >
+                    <Grid xs={12}>
+                        <SliderBorderSize
+                            imageSettings={imageSettings}
+                            onChange={(e) => handleImageSettingsChanged(e, "borderSize")} />
                     </Grid>
 
-                    <Grid xs={12} container sx={{ px: '1.5rem', py: '1rem' }} >
-                        <Grid xs={12}>
-                            <SliderBorderSize
-                                imageSettings={imageSettings}
-                                onChange={(e) => handleImageSettingsChanged(e, "borderSize")} />
-                        </Grid>
-
-                        <Grid xs={12}>
-                            <SliderZoom
-                                imageSettings={imageSettings}
-                                onChange={(e) => handleZoomChanged(e)} />
-                        </Grid>
+                    <Grid xs={12}>
+                        <SliderZoom
+                            imageSettings={imageSettings}
+                            onChange={(e) => handleZoomChanged(e)} />
                     </Grid>
 
+                    <Grid xs={12}>
+                        <SliderRatio
+                            imageSettings={imageSettings}
+                            onChange={(e) => handleImageSettingsChanged(e, "ratio")} />
+                    </Grid>
                 </Grid>
-            </Grid >
+
+            </Grid>
+
         </Box >
     );
 }
 
 // ELEMENTS ----------------------------------------------------------------------------------------
 
-function MainAppBar({ loadButton }) {
+function MainAppBar({ loadButton, downloadButton }) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -162,10 +188,31 @@ function MainAppBar({ loadButton }) {
                         Framimg
                     </Typography>
                     {loadButton}
+                    {downloadButton}
                 </Toolbar>
             </AppBar>
         </Box>
     )
+}
+
+function SliderRatio({ imageSettings, onChange }) {
+    return (
+        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <AspectRatioIcon />
+            <Slider
+                defaultValue={1.0}
+                min={1}
+                max={2}
+                step={null}
+                marks={ratioMarks}
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                value={imageSettings.ratio}
+                getAriaValueText={(v) => { `${v}` }}
+                onChange={onChange}
+            />
+        </Stack>
+    );
 }
 
 function SliderBorderSize({ imageSettings, onChange }) {
@@ -233,6 +280,17 @@ function ImageInputButton({ loading, onChange }) {
     );
 }
 
+function ImageDownloadButton({ disabled, onClick }) {
+
+    return (
+        <IconButton aria-label="load image" component="label" onClick={onClick}
+            disabled={disabled} >
+            <FileDownloadIcon color="contrastText" />
+        </IconButton >
+    );
+}
+
+
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -246,3 +304,33 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 
+const ratioMarks = [
+    {
+        value: 1,
+        label: '1:1',
+    },
+    {
+        value: 5 / 4,
+        label: '5:4',
+    },
+    {
+        value: 4 / 3,
+        label: '4:3',
+    },
+    {
+        value: 3 / 2,
+        label: '3:2',
+    },
+    {
+        value: 8 / 5,
+        label: '8:5',
+    },
+    {
+        value: 16 / 9,
+        label: '16:9',
+    },
+    {
+        value: 2,
+        label: '2:1',
+    }
+];

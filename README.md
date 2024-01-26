@@ -12,8 +12,6 @@
 5. Panorama
     - ... panorama ...
 
-
-
 ###
 
 1. soit on veut une marge constante avec ratio de sortie
@@ -37,6 +35,31 @@ https://stackoverflow.com/questions/23268322/how-to-load-images-using-web-worker
 https://medium.com/@pdx.lucasm/canvas-with-react-js-32e133c05258
 https://stackoverflow.com/questions/5789239/calculate-largest-inscribed-rectangle-in-a-rotated-rectangle#7513445
 https://stackoverflow.com/questions/65815511/make-child-of-material-ui-grid-item-stretch-to-fit-the-remaining-height-of-the-p
+https://sharp.pixelplumbing.com/
+https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version#480642
+https://github.com/callstack/react-native-image-editor
+
+
+optionalDependencies:
+    "@img/sharp-darwin-arm64" "0.33.2"
+    "@img/sharp-darwin-x64" "0.33.2"
+    "@img/sharp-libvips-darwin-arm64" "1.0.1"
+    "@img/sharp-libvips-darwin-x64" "1.0.1"
+    "@img/sharp-libvips-linux-arm" "1.0.1"
+    "@img/sharp-libvips-linux-arm64" "1.0.1"
+    "@img/sharp-libvips-linux-s390x" "1.0.1"
+    "@img/sharp-libvips-linux-x64" "1.0.1"
+    "@img/sharp-libvips-linuxmusl-arm64" "1.0.1"
+    "@img/sharp-libvips-linuxmusl-x64" "1.0.1"
+    "@img/sharp-linux-arm" "0.33.2"
+    "@img/sharp-linux-arm64" "0.33.2"
+    "@img/sharp-linux-s390x" "0.33.2"
+    "@img/sharp-linux-x64" "0.33.2"
+    "@img/sharp-linuxmusl-arm64" "0.33.2"
+    "@img/sharp-linuxmusl-x64" "0.33.2"
+    "@img/sharp-wasm32" "0.33.2"
+    "@img/sharp-win32-ia32" "0.33.2"
+    "@img/sharp-win32-x64" "0.33.2"
 
 pilege
 imageSettings    : border | out_ratio | zoom

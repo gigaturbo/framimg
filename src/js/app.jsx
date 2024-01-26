@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import ImageIcon from '@mui/icons-material/Image';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
@@ -24,7 +23,6 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
 
 export function App() {
 
@@ -103,16 +101,10 @@ export function App() {
 
     // HTML ----------------------------------------------------------------------------------------
 
-    function getFileNameText(f) {
-        if (f == null) {
-            return ' - '
-        }
-        return f.name
-    }
 
     return (
-        <Box sx={{ flexGrow: 1 }} >
-            <Grid container sx={{ backgroundColor: "#666666" }} >
+        <Box sx={{ flexGrow: 1 }}  >
+            <Grid container sx={{ backgroundColor: "#666666" }} disableEqualOverflow>
 
                 <Grid xs={12}>
                     <MainAppBar loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />} />
@@ -120,12 +112,14 @@ export function App() {
 
                 <Grid xs={12} container spacing={2} >
 
-                    <Grid xs={12} ref={canvasGridContainerRef}>
-                        <ImageCanvas
-                            image={image}
-                            imageSettings={imageSettings}
-                            canvasSize={canvasSize}
-                            onImageDrag={handleImageDrag} />
+                    <Grid xs={12} >
+                        <Box ref={canvasGridContainerRef}>
+                            <ImageCanvas
+                                image={image}
+                                imageSettings={imageSettings}
+                                canvasSize={canvasSize}
+                                onImageDrag={handleImageDrag} />
+                        </Box>
                     </Grid>
 
                     <Grid xs={12} container sx={{ px: '1.5rem', py: '1rem' }} >

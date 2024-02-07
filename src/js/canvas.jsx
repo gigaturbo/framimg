@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { getProcessedImage, getProcessingParameters } from './utils'
 
-export default function Canvas(props) {
+export default function HTMLCanvas(props) {
 
     const { image, imageSettings, canvasSize, onImageDrag, ...other } = props
     const canvasRef = useRef(null)
@@ -9,14 +9,12 @@ export default function Canvas(props) {
     const mouseInitialPosition = useRef(null)
     const previousTranslation = useRef({ x: 0, y: 0 })
 
-
     function handleMouseMove(e) {
         if (canvasRef != null && mouseInitialPosition.current && e.buttons === 1 && isMouseDown.current) {
             const { ttx, tty } = getTranslation(image, imageSettings, e)
             onImageDrag(ttx, tty)
         }
     }
-
 
     function handleMouseUpOrLeave(e) {
         if (canvasRef != null && mouseInitialPosition.current) {
@@ -29,12 +27,10 @@ export default function Canvas(props) {
         }
     }
 
-
     function handleMouseDown(e) {
         isMouseDown.current = true
         mouseInitialPosition.current = { x: e.offsetX, y: e.offsetY }
     }
-
 
     const getTranslation = (image, imageSettings, e) => {
         const params = getProcessingParameters(image, imageSettings)
@@ -52,7 +48,6 @@ export default function Canvas(props) {
         return ({ ttx, tty })
     }
 
-
     useEffect(() => {
 
         const context = canvasRef.current.getContext('2d')
@@ -67,9 +62,11 @@ export default function Canvas(props) {
 
     }, [image, imageSettings, canvasSize, onImageDrag])
 
-    return <canvas
-        ref={canvasRef}
-        width={canvasSize.w}
-        height={canvasSize.w / imageSettings.ratio}
-        {...other} />
+    return (
+        <canvas
+            ref={canvasRef}
+            width={canvasSize.w}
+            height={canvasSize.w / imageSettings.ratio}
+            {...other}
+        />)
 }

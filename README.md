@@ -27,6 +27,9 @@ https://stackoverflow.com/questions/44480053/how-to-detect-if-screen-size-has-ch
 https://www.npmjs.com/package/react-touch-canvas
 https://observablehq.com/@hubgit/gpu-js-canvas
 https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
+https://github.com/pixijs/pixi-react
+https://fr.wikipedia.org/wiki/Canvas_(HTML)
+https://react.dev/learn/extracting-state-logic-into-a-reducer
 
 optionalDependencies:
     "@img/sharp-darwin-arm64" "0.33.2"

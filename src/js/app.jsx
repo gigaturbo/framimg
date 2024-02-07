@@ -16,6 +16,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { TransformWrapper, TransformComponent, useTransformEffect } from "react-zoom-pan-pinch";
+import { RemoveScroll } from 'react-remove-scroll';
 
 import { getProcessedImage } from './utils'
 
@@ -61,15 +63,14 @@ export function App() {
         };
     }, []);
 
-
     // File change
     const handleFileChange = (e) => {
         setFile(e.target.files[0])
         const reader = new FileReader();
         reader.addEventListener('load', event => {
             Image.load(event.target.result).then(function (i) {
-                setImage(i.resize({ width: 2048 }))
-                // setImage(i)
+                // setImage(i.resize({ width: 2048 }))
+                setImage(i)
                 setIsImageLoading(false)
             });
         });
@@ -103,13 +104,13 @@ export function App() {
         setImageSettings(nSettings)
     }
 
+
     const handleDownload = (e) => {
         const link = document.createElement('a');
         link.download = 'image';
         link.href = getProcessedImage(image, imageSettings).toDataURL();
         link.click();
     };
-
 
 
     // HTML ----------------------------------------------------------------------------------------
@@ -122,7 +123,9 @@ export function App() {
             height: "100vh",
             backgroundColor: "#666666"
         }}>
-            <Grid container disableEqualOverflow>
+
+            {/* APP BAR */}
+            <Grid container>
                 <Grid xs={12}>
                     <MainAppBar
                         loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />}
@@ -131,6 +134,7 @@ export function App() {
                 </Grid>
             </Grid>
 
+            {/* CANVAS */}
             <Box ref={canvasGridContainerRef}>
                 <ImageCanvas
                     image={image}
@@ -139,8 +143,10 @@ export function App() {
                     onImageDrag={handleImageDrag} />
             </Box>
 
+            {/* FILL */}
             <Box sx={{ marginTop: "auto" }}></Box>
 
+            {/* BUTTONS */}
             <Grid xs={12} container spacing={2}>
                 <Grid xs={12} container sx={{ px: '1.5rem', py: '2rem' }} >
                     <Grid xs={12}>
@@ -161,7 +167,6 @@ export function App() {
                             onChange={(e) => handleImageSettingsChanged(e, "ratio")} />
                     </Grid>
                 </Grid>
-
             </Grid>
 
         </Box >
@@ -197,7 +202,7 @@ function MainAppBar({ loadButton, downloadButton }) {
 
 function SliderRatio({ imageSettings, onChange }) {
     return (
-        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+        <Stack spacing={2} direction="row" sx={{ mb: 2 }} alignItems="center">
             <AspectRatioIcon />
             <Slider
                 defaultValue={1.0}
@@ -257,14 +262,31 @@ function SliderZoom({ imageSettings, onChange }) {
 function ImageCanvas({ image, imageSettings, canvasSize, onImageDrag }) {
     if (image != null) {
         return (
-            <Canvas
-                image={image}
-                imageSettings={imageSettings}
-                canvasSize={canvasSize}
-                onImageDrag={onImageDrag} />
+            <RemoveScroll allowPinchZoom={true}>
+                <TransformWrapper>
+                    <TransformComponent>
+                        <Canvas
+                            image={image}
+                            imageSettings={imageSettings}
+                            canvasSize={canvasSize}
+                            // onImageDrag={onImageDrag}
+                            onImageDrag={() => { }} // TODO replace by pinchzoompan
+                        />
+                    </TransformComponent>
+                </TransformWrapper>
+            </RemoveScroll>
         )
     }
-    else { return (<></>) }
+    else {
+        return (<>
+            <RemoveScroll allowPinchZoom={true}>
+                <TransformWrapper>
+                    <TransformComponent>
+                    </TransformComponent>
+                </TransformWrapper>
+            </RemoveScroll>
+        </>)
+    }
 }
 
 function ImageInputButton({ loading, onChange }) {

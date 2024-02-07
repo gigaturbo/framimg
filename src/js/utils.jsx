@@ -1,5 +1,3 @@
-
-
 export const getProcessedImage = (image, imageSettings) => {
 
     if (imageSettings.ratioMode === "OUTPUT_RATIO") {

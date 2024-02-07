@@ -1,23 +1,6 @@
 ### Pipeline 
 
-1. Calcul crop selon ratio de sortie
-    - dx/dy, cR     =>  croppedImage
-
-2. Rotation
-    - ... rotate ...
-
-3. Translation + Zoom
-    - z, tx, ty        =>  transImage
-
-5. Panorama
-    - ... panorama ...
-
-###
-
-1. soit on veut une marge constante avec ratio de sortie
-2. soit on veut une marge var. + ratio de sortie + ratio d'entrée (réglable ou non)
-
-**Donc Cas 1 crop**
+**Cas 1 crop**
 
 cR = (1 - b)/(oH/oW - b)
 d = (b*cW)/2(1-b)
@@ -38,7 +21,12 @@ https://stackoverflow.com/questions/65815511/make-child-of-material-ui-grid-item
 https://sharp.pixelplumbing.com/
 https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version#480642
 https://github.com/callstack/react-native-image-editor
-
+https://www.npmjs.com/package/react-remove-scroll
+https://www.npmjs.com/package/sharp
+https://stackoverflow.com/questions/44480053/how-to-detect-if-screen-size-has-changed-to-mobile-in-react
+https://www.npmjs.com/package/react-touch-canvas
+https://observablehq.com/@hubgit/gpu-js-canvas
+https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
 
 optionalDependencies:
     "@img/sharp-darwin-arm64" "0.33.2"
@@ -60,6 +48,8 @@ optionalDependencies:
     "@img/sharp-wasm32" "0.33.2"
     "@img/sharp-win32-ia32" "0.33.2"
     "@img/sharp-win32-x64" "0.33.2"
+
+
 
 pilege
 imageSettings    : border | out_ratio | zoom

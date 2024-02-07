@@ -53,6 +53,7 @@ export function App() {
             Image.load(event.target.result).then(function (i) {
                 // setImage(i.resize({ width: 2048 }))
                 setImage(i)
+                // setImage(event.target.result)
                 setIsImageLoading(false)
             });
         });

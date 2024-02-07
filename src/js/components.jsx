@@ -13,10 +13,9 @@ import Box from '@mui/material/Box';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { styled } from '@mui/material/styles';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { RemoveScroll } from 'react-remove-scroll';
 
-import HTMLCanvas from './canvas.jsx'
+import HTMLCanvas from './html_canvas.jsx'
 
 
 export function MainAppBar({ loadButton, downloadButton }) {
@@ -44,64 +43,6 @@ export function MainAppBar({ loadButton, downloadButton }) {
     )
 }
 
-export function SliderRatio({ imageSettings, onChange }) {
-    return (
-        <Stack spacing={2} direction="row" sx={{ mb: 2 }} alignItems="center">
-            <AspectRatioIcon />
-            <Slider
-                defaultValue={1.0}
-                min={1}
-                max={2}
-                step={null}
-                marks={ratioMarks}
-                aria-label="Default"
-                valueLabelDisplay="auto"
-                value={imageSettings.ratio}
-                getAriaValueText={(v) => { `${v}` }}
-                onChange={onChange}
-            />
-        </Stack>
-    );
-}
-
-export function SliderBorderSize({ imageSettings, onChange }) {
-    return (
-        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-            <LineWeightIcon />
-            <Slider
-                defaultValue={0}
-                min={0}
-                max={50}
-                step={1}
-                marks
-                aria-label="Default"
-                valueLabelDisplay="auto"
-                value={imageSettings.borderSize}
-                getAriaValueText={(v) => { `${v}%` }}
-                onChange={onChange}
-            />
-        </Stack>
-    );
-}
-
-export function SliderZoom({ imageSettings, onChange }) {
-    return (
-        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-            <ZoomInIcon />
-            <Slider
-                defaultValue={1}
-                min={1}
-                max={3}
-                step={0.01}
-                aria-label="Default"
-                valueLabelDisplay="auto"
-                value={imageSettings.zoom}
-                getAriaValueText={(v) => { `${parseInt(v * 100)}%` }}
-                onChange={onChange}
-            />
-        </Stack>
-    );
-}
 
 export function InteractiveImageViewer({ image, imageSettings, canvasSize, onImageDrag }) {
     if (image != null) {
@@ -124,6 +65,69 @@ export function InteractiveImageViewer({ image, imageSettings, canvasSize, onIma
     }
 }
 
+
+export function SliderRatio({ imageSettings, onChange }) {
+    return (
+        <Stack spacing={2} direction="row" sx={{ mb: 2 }} alignItems="center">
+            <AspectRatioIcon />
+            <Slider
+                defaultValue={1.0}
+                min={1}
+                max={2}
+                step={null}
+                marks={ratioMarks}
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                value={imageSettings.ratio}
+                getAriaValueText={(v) => { `${v}` }}
+                onChange={onChange}
+            />
+        </Stack>
+    );
+}
+
+
+export function SliderBorderSize({ imageSettings, onChange }) {
+    return (
+        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <LineWeightIcon />
+            <Slider
+                defaultValue={0}
+                min={0}
+                max={50}
+                step={1}
+                marks
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                value={imageSettings.borderSize}
+                getAriaValueText={(v) => { `${v}%` }}
+                onChange={onChange}
+            />
+        </Stack>
+    );
+}
+
+
+export function SliderZoom({ imageSettings, onChange }) {
+    return (
+        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <ZoomInIcon />
+            <Slider
+                defaultValue={1}
+                min={1}
+                max={3}
+                step={0.01}
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                value={imageSettings.zoom}
+                getAriaValueText={(v) => { `${parseInt(v * 100)}%` }}
+                onChange={onChange}
+            />
+        </Stack>
+    );
+}
+
+
 export function ImageInputButton({ loading, onChange }) {
     return (
         <IconButton aria-label="load image" component="label">
@@ -137,6 +141,7 @@ export function ImageInputButton({ loading, onChange }) {
     );
 }
 
+
 export function ImageDownloadButton({ disabled, onClick }) {
 
     return (
@@ -149,6 +154,7 @@ export function ImageDownloadButton({ disabled, onClick }) {
 
 
 
+// --------------
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',

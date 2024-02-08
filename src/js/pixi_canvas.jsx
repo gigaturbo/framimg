@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useRef, useEffect } from 'react';
 import { Stage, Sprite, Graphics } from '@pixi/react';
 import { checkDataUrl } from 'pixi.js';
 
@@ -11,6 +11,43 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
         [image, imageSettings, canvasSize]
     )
 
+    const ref = useRef(null)
+    const isMouseDown = useRef(false)
+    const mouseInitialPosition = useRef({ x: 0, y: 0 })
+    const previousTranslation = useRef({ x: 0, y: 0 })
+
+    function handleMouseMove(e) {
+        if (ref != null && mouseInitialPosition.current && e.buttons === 1 && isMouseDown.current) {
+            const { ttx, tty } = getTranslation(e)
+            onImageDrag(ttx, tty)
+        }
+    }
+
+    function handleMouseUpOrLeave(e) {
+        if (ref != null && mouseInitialPosition.current) {
+            isMouseDown.current = false
+            const { ttx, tty } = getTranslation(e)
+            previousTranslation.current.x = ttx
+            previousTranslation.current.y = tty
+            mouseInitialPosition.current = null
+            onImageDrag(ttx, tty)
+        }
+    }
+
+    function handleMouseDown(e) {
+        isMouseDown.current = true
+        mouseInitialPosition.current = { x: e.offsetX, y: e.offsetY }
+    }
+
+    const getTranslation = (e) => {
+        const dx = (e.offsetX - mouseInitialPosition.current.x)
+        const dy = (e.offsetY - mouseInitialPosition.current.y)
+        ttx = parseInt(dx + previousTranslation.current.x)
+        tty = parseInt(dy + previousTranslation.current.y)
+        return ({ ttx, tty })
+    }
+
+
     const draw = useCallback((g) => {
         g.clear();
         g.beginFill(0xFFFFFF, 1);
@@ -22,21 +59,30 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
     }, [image, imageSettings, canvasSize]);
 
 
+    useEffect(() => {
+        ref.current.onmousemove = handleMouseMove;
+        ref.current.onmousedown = handleMouseDown;
+        ref.current.onmouseup = handleMouseUpOrLeave;
+        ref.current.onmouseleave = handleMouseUpOrLeave;
+    }, [image, imageSettings, canvasSize, onImageDrag])
+
     return (
-        <Stage
-            width={cW}
-            height={cW / imageSettings.ratio}
-            options={{ backgroundColor: 0xAABBBB }}>
-            <Sprite
-                image={imgDataURL}
-                width={zW * imageSettings.zoom}
-                height={zH * imageSettings.zoom}
-                anchor={0.5}
-                x={parseInt(cW / 2) + imageSettings.translation.x}
-                y={parseInt(cH / 2) + imageSettings.translation.y}
-            />
-            <Graphics draw={draw} />
-        </Stage>
+        <div ref={ref}>
+            <Stage
+                width={cW}
+                height={cW / imageSettings.ratio}
+                options={{ backgroundColor: 0xAABBBB }}>
+                <Sprite
+                    image={imgDataURL}
+                    width={zW * imageSettings.zoom}
+                    height={zH * imageSettings.zoom}
+                    anchor={0.5}
+                    x={parseInt(cW / 2) + imageSettings.translation.x}
+                    y={parseInt(cH / 2) + imageSettings.translation.y}
+                />
+                <Graphics draw={draw} />
+            </Stage>
+        </div>
     );
 }
 

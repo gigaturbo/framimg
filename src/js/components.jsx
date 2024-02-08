@@ -49,12 +49,6 @@ export function InteractiveImageViewer({ image, imageSettings, canvasSize, onIma
     if (image != null) {
         return (
             <RemoveScroll allowPinchZoom={true}>
-                {/* <HTMLCanvas
-                    image={image}
-                    imageSettings={imageSettings}
-                    canvasSize={canvasSize}
-                    onImageDrag={onImageDrag}
-                /> */}
                 <PixiCanvas
                     image={image}
                     imageSettings={imageSettings}

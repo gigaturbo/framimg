@@ -81,6 +81,7 @@ export function App() {
         let nSettings = { ...imageSettings }
         nSettings.translation.x = tx
         nSettings.translation.y = ty
+        console.log(`${tx}  ${ty}`)
 
         setImageSettings(nSettings)
     }

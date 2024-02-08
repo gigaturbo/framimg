@@ -58,30 +58,30 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
     }, [image, imageSettings, canvasSize]);
 
 
-    useEffect(() => {
-        ref.current.onmousemove = handleMouseMove;
-        ref.current.onmousedown = handleMouseDown;
-        ref.current.onmouseup = handleMouseUpOrLeave;
-        ref.current.onmouseleave = handleMouseUpOrLeave;
-    }, [image, imageSettings, canvasSize, onImageDrag])
+    // useEffect(() => {
+    //     ref.current.onmousemove = handleMouseMove;
+    //     ref.current.onmousedown = handleMouseDown;
+    //     ref.current.onmouseup = handleMouseUpOrLeave;
+    //     ref.current.onmouseleave = handleMouseUpOrLeave;
+    // }, [image, imageSettings, canvasSize, onImageDrag])
 
     return (
-        <div ref={ref}>
-            <Stage
-                width={cW}
-                height={cW / imageSettings.ratio}
-                options={{ backgroundColor: 0xAABBBB }}>
-                <Sprite
-                    image={imgDataURL}
-                    width={zW * imageSettings.zoom}
-                    height={zH * imageSettings.zoom}
-                    anchor={0.5}
-                    x={parseInt(cW / 2) + imageSettings.translation.x}
-                    y={parseInt(cH / 2) + imageSettings.translation.y}
-                />
-                <Graphics draw={draw} />
-            </Stage>
-        </div>
+        // <div ref={ref}>
+        <Stage
+            width={cW}
+            height={cW / imageSettings.ratio}
+            options={{ backgroundColor: 0xAABBBB }}>
+            <Sprite
+                image={imgDataURL}
+                width={zW * imageSettings.zoom}
+                height={zH * imageSettings.zoom}
+                anchor={0.5}
+                x={parseInt(cW / 2) + imageSettings.translation.x}
+                y={parseInt(cH / 2) + imageSettings.translation.y}
+            />
+            <Graphics draw={draw} />
+        </Stage>
+        // </div>
     );
 }
 

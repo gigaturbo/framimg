@@ -76,23 +76,3 @@ export const getProcessingParameters = (image, imageSettings) => {
     return ({ cR: cR, dx: dx, dy: dy, pad: pad, ctx: ctx, cty: cty, totalWidth: totalWidth, totalHeight: totalHeight, innerWidth: innerWidth, innerHeight: innerHeight })
 
 }
-
-
-export const getProcessingParameters2 = (image, imageSettings) => {
-
-    let cR = image.width / image.height
-    let pad = 0
-
-    if (imageSettings.ratioMode === "OUTPUT_RATIO") {
-
-        const b = imageSettings.borderSize
-        const oR = imageSettings.ratio
-        const cR = (1 - b / 100) / (1 / oR - b / 100)
-        pad = parseInt((b * parseInt(image.height * cR) / 100) / (2 - b / 50))
-
-
-    }
-
-    return ({ cR: cR, pad: pad })
-
-}

@@ -31,6 +31,7 @@ https://github.com/pixijs/pixi-react
 https://fr.wikipedia.org/wiki/Canvas_(HTML)
 https://react.dev/learn/extracting-state-logic-into-a-reducer
 
+
 optionalDependencies:
     "@img/sharp-darwin-arm64" "0.33.2"
     "@img/sharp-darwin-x64" "0.33.2"

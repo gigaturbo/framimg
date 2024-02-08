@@ -51,9 +51,7 @@ export function App() {
         const reader = new FileReader();
         reader.addEventListener('load', event => {
             Image.load(event.target.result).then(function (i) {
-                // setImage(i.resize({ width: 2048 }))
                 setImage(i)
-                // setImage(event.target.result)
                 setIsImageLoading(false)
             });
         });

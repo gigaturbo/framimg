@@ -8,16 +8,17 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
     const params = getProcessingParameters2(image, imageSettings)
     const imgDataURL = useMemo(() => { return image.toDataURL() }, [image])
 
-    const mwidth = parseInt(canvasSize.w - params.pad)
-    const cpad = parseInt(canvasSize.w * (imageSettings.borderSize / 100))
+    const real_pad = parseInt(canvasSize.w * (imageSettings.borderSize / 200))
+    const inner_width = parseInt(canvasSize.w - real_pad * 2)
+
 
     const draw = useCallback((g) => {
         g.clear();
         g.beginFill(0xFFFFFF);
-        g.drawRect(0, 0, canvasSize.w, cpad);
-        g.drawRect(0, 0, cpad, canvasSize.w / imageSettings.ratio);
-        g.drawRect(canvasSize.w - cpad, 0, canvasSize.w, cpad);
-        g.drawRect(0, (canvasSize.w / imageSettings.ratio) - cpad, cpad, canvasSize.w / imageSettings.ratio);
+        g.drawRect(0, 0, canvasSize.w, real_pad);
+        g.drawRect(0, 0, real_pad, canvasSize.w / imageSettings.ratio);
+        g.drawRect(canvasSize.w - real_pad, 0, real_pad, canvasSize.w / imageSettings.ratio);
+        g.drawRect(0, (canvasSize.w / imageSettings.ratio) - real_pad, canvasSize.w, real_pad);
         g.endFill();
     }, [imageSettings]);
 
@@ -28,11 +29,11 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
             options={{ backgroundColor: 0xAABBBB }}>
             <Sprite
                 image={imgDataURL}
-                width={mwidth}
-                height={mwidth / params.cR}
+                width={inner_width * imageSettings.zoom}
+                height={(inner_width / params.cR) * imageSettings.zoom}
                 anchor={0.5}
-                x={parseInt(canvasSize.w / 2)}
-                y={parseInt((canvasSize.w / imageSettings.ratio) / 2)}
+                x={parseInt(canvasSize.w / 2) + imageSettings.translation.x}
+                y={parseInt((canvasSize.w / imageSettings.ratio) / 2) + imageSettings.translation.y}
             />
             <Graphics draw={draw} />
         </Stage>

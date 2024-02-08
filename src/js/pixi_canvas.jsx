@@ -1,6 +1,5 @@
 import { useMemo, useCallback, useRef, useEffect } from 'react';
 import { Stage, Sprite, Graphics } from '@pixi/react';
-import { checkDataUrl } from 'pixi.js';
 
 export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDrag }) {
 

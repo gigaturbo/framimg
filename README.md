@@ -31,6 +31,7 @@ https://github.com/pixijs/pixi-react
 https://fr.wikipedia.org/wiki/Canvas_(HTML)
 https://react.dev/learn/extracting-state-logic-into-a-reducer
 
+https://github.com/retyui/react-quick-pinch-zoom/blob/master/docs/api/README.md
 
 optionalDependencies:
     "@img/sharp-darwin-arm64" "0.33.2"

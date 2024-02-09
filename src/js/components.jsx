@@ -90,7 +90,7 @@ export function SliderRatio({ imageSettings, onChange }) {
 
 export function SliderBorderSize({ imageSettings, onChange }) {
     return (
-        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+        <Stack spacing={2} direction="row" sx={{ mb: 0.5 }} alignItems="center">
             <LineWeightIcon />
             <Slider
                 defaultValue={0}
@@ -111,7 +111,7 @@ export function SliderBorderSize({ imageSettings, onChange }) {
 
 export function SliderZoom({ imageSettings, onChange }) {
     return (
-        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+        <Stack spacing={2} direction="row" sx={{ mb: 0.5 }} alignItems="center">
             <ZoomInIcon />
             <Slider
                 defaultValue={1}
@@ -132,7 +132,7 @@ export function SliderZoom({ imageSettings, onChange }) {
 export function ImageInputButton({ loading, onChange }) {
     return (
         <IconButton aria-label="load image" component="label">
-            <ImageIcon color="contrastText" />
+            <ImageIcon />
             <VisuallyHiddenInput
                 type="file"
                 accept=".jpg, .jpeg, .png"
@@ -148,7 +148,7 @@ export function ImageDownloadButton({ disabled, onClick }) {
     return (
         <IconButton aria-label="load image" component="label" onClick={onClick}
             disabled={disabled} >
-            <FileDownloadIcon color="contrastText" />
+            <FileDownloadIcon />
         </IconButton >
     );
 }

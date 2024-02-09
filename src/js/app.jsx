@@ -51,6 +51,11 @@ export function App() {
         const reader = new FileReader();
         reader.addEventListener('load', event => {
             Image.load(event.target.result).then(function (i) {
+                let settings = { ...imageSettings }
+                settings.zoom = 1
+                settings.translation = { x: 0, y: 0 }
+                settings.angle = 0
+                setImageSettings(settings)
                 setImage(i)
                 setIsImageLoading(false)
             });
@@ -81,8 +86,6 @@ export function App() {
         let nSettings = { ...imageSettings }
         nSettings.translation.x = tx
         nSettings.translation.y = ty
-        console.log(`${tx}  ${ty}`)
-
         setImageSettings(nSettings)
     }
 

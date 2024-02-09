@@ -4,6 +4,7 @@
   "description": "Add frames to photos",
   "author": "gigaturbo <lac.baptiste@pm.me>",
   "license": "GPL-3.0",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "devDependencies": {
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
@@ -14,17 +15,6 @@
     "process": "^0.11.10",
     "stream-browserify": "^3.0.0",
     "util": "^0.12.3"
-  },
-  "browserslist": "> 0.5%, last 2 versions, not dead",
-  "source": "src/index.html",
-  "targets": {
-    "default": {
-      "distDir": "/var/www/my_webapp/www/"
-    }
-  },
-  "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -39,7 +29,16 @@
     "pixi.js": "^7.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native-gesture-handler": "^2.15.0",
     "react-remove-scroll": "^2.5.7"
+  },
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "source": "src/index.html",
+  "targets": {
+    "default": {
+      "distDir": "/var/www/my_webapp/www/"
+    }
   }
 }

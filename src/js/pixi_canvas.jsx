@@ -57,6 +57,10 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
         g.endFill();
     }, [image, imageSettings, canvasSize]);
 
+    // const panGesture = Gesture.Pan()
+    //     .onUpdate((e) => {
+    //         console.log(e)
+    //     });
 
     // useEffect(() => {
     //     ref.current.onmousemove = handleMouseMove;
@@ -67,6 +71,7 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
 
     return (
         // <div ref={ref}>
+        // <GestureDetector gesture={panGesture}>
         <Stage
             width={cW}
             height={cW / imageSettings.ratio}
@@ -81,6 +86,7 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
             />
             <Graphics draw={draw} />
         </Stage>
+        // </GestureDetector>
         // </div>
     );
 }

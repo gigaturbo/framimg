@@ -1,6 +1,5 @@
-import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import { Stage, Sprite, Graphics } from '@pixi/react';
-import assert from 'assert';
+import { Graphics, Sprite, Stage } from '@pixi/react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDrag }) {
 
@@ -16,25 +15,20 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
     const mouseInitialPosition = useRef(null)
     const previousTranslation = useRef({ x: 0, y: 0 })
 
-    const [tmpv, setTmpv] = useState("nothing")
-
     function handleMouseMove(e) {
         switch (e.type) {
+            case 'touchmove':
+                if (ref != null && mouseInitialPosition.current && isMouseDown.current) {
+                    const { ctx, cty } = getTranslation(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+                    onImageDrag(ctx, cty);
+                }
+                break;
             case 'pointermove':
                 if (ref != null && mouseInitialPosition.current && e.buttons === 1 && isMouseDown.current) {
                     const { ctx, cty } = getTranslation(e.offsetX, e.offsetY)
                     onImageDrag(ctx, cty)
                 }
-                break
-            case 'touchmove':
-                if (ref != null && mouseInitialPosition.current && isMouseDown.current) {
-                    const { ctx, cty } = getTranslation(
-                        e.changedTouches[0].pageX,
-                        e.changedTouches[0].pageY
-                    )
-                    onImageDrag(ctx, cty)
-                }
-                break
+                break;
         }
     }
 
@@ -50,21 +44,18 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
                     mouseInitialPosition.current = null
                     onImageDrag(ctx, cty)
                 }
-                break
+                break;
             case 'touchecancel':
             case 'touchend':
                 if (ref != null && mouseInitialPosition.current) {
                     isMouseDown.current = false
-                    const { ctx, cty } = getTranslation(
-                        e.changedTouches[0].pageX,
-                        e.changedTouches[0].pageY
-                    )
+                    const { ctx, cty } = getTranslation(e.changedTouches[0].pageX, e.changedTouches[0].pageY)
                     previousTranslation.current.x = ctx
                     previousTranslation.current.y = cty
                     mouseInitialPosition.current = null
                     onImageDrag(ctx, cty)
                 }
-                break
+                break;
         }
 
     }
@@ -74,24 +65,21 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
             case 'pointerdown':
                 isMouseDown.current = true
                 mouseInitialPosition.current = { x: e.offsetX, y: e.offsetY }
-                break
+                break;
             case 'touchstart':
                 isMouseDown.current = true
-                mouseInitialPosition.current = {
-                    x: e.changedTouches[0].pageX,
-                    y: e.changedTouches[0].pageY
-                }
-                break
+                mouseInitialPosition.current = { x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY }
+                break;
         }
     }
 
-    const getTranslation = (nx, ny) => {
+    function getTranslation(nx, ny) {
         // Compute displacement
         const dx = (nx - mouseInitialPosition.current.x)
         const dy = (ny - mouseInitialPosition.current.y)
         // Add to previous translations
-        ttx = dx + previousTranslation.current.x
-        tty = dy + previousTranslation.current.y
+        const ttx = dx + previousTranslation.current.x
+        const tty = dy + previousTranslation.current.y
         // Cap translations
         const ctx = Math.max(Math.min(ttx, mtx / 2), -mtx / 2)
         const cty = Math.max(Math.min(tty, mty / 2), -mty / 2)
@@ -170,8 +158,8 @@ const calcParams = (image, imageSettings, canvasSize) => {
     const mtx = dW - iW // width overlap (max)
     const mty = dH - iH // height overlap (max)
 
-    assert(mtx >= 0)
-    assert(mty >= 0)
+    // assert(mtx >= 0)
+    // assert(mty >= 0)
 
     // Cap translations
     const ctx = Math.max(Math.min(imageSettings.translation.x, mtx / 2), -mtx / 2)

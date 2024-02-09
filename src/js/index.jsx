@@ -1,9 +1,9 @@
+import CssBaseline from '@mui/material/CssBaseline';
+import { green, indigo } from '@mui/material/colors';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { StrictMode } from 'react';
 import { createRoot } from "react-dom/client";
 import { App } from "./app";
-import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { indigo, green } from '@mui/material/colors';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';

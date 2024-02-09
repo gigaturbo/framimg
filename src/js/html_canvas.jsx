@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { getProcessedImage, getProcessingParameters } from './utils'
 
 export default function HTMLCanvas(props) {

@@ -1,14 +1,11 @@
-import React from "react";
-import { useState, useEffect, useRef } from 'react';
-import { Image } from 'image-js';
-import Grid from '@mui/material/Unstable_Grid2';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
+import { Image } from 'image-js';
+import React, { useEffect, useRef, useState } from "react";
 
-import { getProcessedImage } from './utils'
-import { MainAppBar, SliderRatio, SliderBorderSize, SliderZoom, InteractiveImageViewer, ImageInputButton, ImageDownloadButton } from './components'
+import { ImageDownloadButton, ImageInputButton, InteractiveImageViewer, MainAppBar, SliderBorderSize, SliderRatio, SliderZoom } from './components';
+import { getProcessedImage } from './utils';
 
-
-import { Typography } from "@mui/material";
 
 export function App() {
 
@@ -27,7 +24,6 @@ export function App() {
 
     const canvasGridContainerRef = useRef(null)
 
-    const [touchText, setTouchText] = useState("---")
 
     // EVENTS --------------------------------------------------------------------------------------
 
@@ -62,6 +58,8 @@ export function App() {
         });
         setIsImageLoading(true)
         reader.readAsDataURL(e.target.files[0]);
+        // let s = sharp(e.target.files[0])
+        // console.log(s)
     }
 
 
@@ -98,17 +96,6 @@ export function App() {
     };
 
 
-    const handleTouchText = (e) => {
-        switch (e.type) {
-            case 'pointermove':
-                setTouchText(`${e.type}\t${e.clientX} ${e.clientY}`)
-                break
-            case 'touchmove':
-                setTouchText(`${e.type}\t${e.changedTouches[0].pageX} ${e.changedTouches[0].pageY}`)
-                break
-        }
-    };
-
 
     // HTML ----------------------------------------------------------------------------------------
 
@@ -120,8 +107,6 @@ export function App() {
             height: "100vh",
             backgroundColor: "#666666"
         }}
-            onTouchMove={handleTouchText}
-            onPointerMove={handleTouchText}
         >
 
             {/* APP BAR */}
@@ -131,11 +116,6 @@ export function App() {
                         loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />}
                         downloadButton={<ImageDownloadButton disabled={isImageLoading || image === null} onClick={handleDownload} />}
                     />
-                </Grid>
-                <Grid>
-                    <Typography>
-                        {touchText}
-                    </Typography>
                 </Grid>
             </Grid>
 

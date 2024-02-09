@@ -33,7 +33,7 @@ https://react.dev/learn/extracting-state-logic-into-a-reducer
 https://github.com/retyui/react-quick-pinch-zoom/blob/master/docs/api/README.md
 https://necolas.github.io/react-native-web/docs/setup/
 https://necolas.github.io/react-native-web/docs/multi-platform/#compiling-and-bundling
-
+https://developer.mozilla.org/en-US/docs/Web/API/Touch_events#interfaces
 
 optionalDependencies:
     "@img/sharp-darwin-arm64" "0.33.2"

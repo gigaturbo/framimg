@@ -68,6 +68,12 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
         ref.current.onpointerdown = handleMouseDown;
         ref.current.onpointerup = handleMouseUpOrLeave;
         ref.current.onpointerleave = handleMouseUpOrLeave;
+
+        ref.current.ontouchmove = handleMouseMove;
+        ref.current.ontouchend = handleMouseDown;
+        ref.current.ontouchstart = handleMouseUpOrLeave;
+        ref.current.ontouchcencel = handleMouseUpOrLeave;
+
     }, [image, imageSettings, canvasSize, onImageDrag])
 
     return (
@@ -129,8 +135,6 @@ const calcParams = (image, imageSettings, canvasSize) => {
     // Set position
     const px = (cW / 2) + ctx   // Sprite x pos
     const py = (cH / 2) + cty   // Sprite y pos
-
-    console.log(`mtx ${mtx} mty ${mty}`)
 
     return { pad, cW, dW, dH, px, py, mtx, mty }
 };

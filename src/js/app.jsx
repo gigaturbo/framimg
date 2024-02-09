@@ -7,10 +7,8 @@ import Box from '@mui/material/Box';
 import { getProcessedImage } from './utils'
 import { MainAppBar, SliderRatio, SliderBorderSize, SliderZoom, InteractiveImageViewer, ImageInputButton, ImageDownloadButton } from './components'
 
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+
+import { Typography } from "@mui/material";
 
 export function App() {
 
@@ -28,6 +26,8 @@ export function App() {
     })
 
     const canvasGridContainerRef = useRef(null)
+
+    const [touchText, setTouchText] = useState("---")
 
     // EVENTS --------------------------------------------------------------------------------------
 
@@ -98,6 +98,18 @@ export function App() {
     };
 
 
+    const handleTouchText = (e) => {
+        switch (e.type) {
+            case 'pointermove':
+                setTouchText(`${e.type}\t${e.clientX} ${e.clientY}`)
+                break
+            case 'touchmove':
+                setTouchText(`${e.type}\t${e.changedTouches[0].pageX} ${e.changedTouches[0].pageY}`)
+                break
+        }
+    };
+
+
     // HTML ----------------------------------------------------------------------------------------
 
 
@@ -107,7 +119,10 @@ export function App() {
             flexDirection: "column",
             height: "100vh",
             backgroundColor: "#666666"
-        }}>
+        }}
+            onTouchMove={handleTouchText}
+            onPointerMove={handleTouchText}
+        >
 
             {/* APP BAR */}
             <Grid container>
@@ -116,6 +131,11 @@ export function App() {
                         loadButton={<ImageInputButton loading={isImageLoading} onChange={handleFileChange} />}
                         downloadButton={<ImageDownloadButton disabled={isImageLoading || image === null} onClick={handleDownload} />}
                     />
+                </Grid>
+                <Grid>
+                    <Typography>
+                        {touchText}
+                    </Typography>
                 </Grid>
             </Grid>
 

@@ -15,7 +15,6 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { styled } from '@mui/material/styles';
 import { RemoveScroll } from 'react-remove-scroll';
 
-// import HTMLCanvas from './html_canvas.jsx'
 import PixiCanvas from './pixi_canvas.jsx'
 
 
@@ -48,7 +47,7 @@ export function MainAppBar({ loadButton, downloadButton }) {
 export function InteractiveImageViewer({ image, imageSettings, canvasSize, onImageDrag }) {
     if (image != null) {
         return (
-            <RemoveScroll allowPinchZoom={true}>
+            <RemoveScroll allowPinchZoom={false}>
                 <PixiCanvas
                     image={image}
                     imageSettings={imageSettings}
@@ -59,10 +58,7 @@ export function InteractiveImageViewer({ image, imageSettings, canvasSize, onIma
         )
     }
     else {
-        return (
-            <>
-                <RemoveScroll allowPinchZoom={true}></RemoveScroll>
-            </>)
+        return (<RemoveScroll allowPinchZoom={false}></RemoveScroll>)
     }
 }
 

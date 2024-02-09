@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useRef, useEffect } from 'react';
+import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import { Stage, Sprite, Graphics } from '@pixi/react';
 import assert from 'assert';
 
@@ -16,33 +16,79 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
     const mouseInitialPosition = useRef(null)
     const previousTranslation = useRef({ x: 0, y: 0 })
 
+    const [tmpv, setTmpv] = useState("nothing")
+
     function handleMouseMove(e) {
-        if (ref != null && mouseInitialPosition.current && e.buttons === 1 && isMouseDown.current) {
-            const { ctx, cty } = getTranslation(e)
-            onImageDrag(ctx, cty)
+        switch (e.type) {
+            case 'pointermove':
+                if (ref != null && mouseInitialPosition.current && e.buttons === 1 && isMouseDown.current) {
+                    const { ctx, cty } = getTranslation(e.offsetX, e.offsetY)
+                    onImageDrag(ctx, cty)
+                }
+                break
+            case 'touchmove':
+                if (ref != null && mouseInitialPosition.current && isMouseDown.current) {
+                    const { ctx, cty } = getTranslation(
+                        e.changedTouches[0].pageX,
+                        e.changedTouches[0].pageY
+                    )
+                    onImageDrag(ctx, cty)
+                }
+                break
         }
     }
 
     function handleMouseUpOrLeave(e) {
-        if (ref != null && mouseInitialPosition.current) {
-            isMouseDown.current = false
-            const { ctx, cty } = getTranslation(e)
-            previousTranslation.current.x = ctx
-            previousTranslation.current.y = cty
-            mouseInitialPosition.current = null
-            onImageDrag(ctx, cty)
+        switch (e.type) {
+            case 'pointerleave':
+            case 'pointerup':
+                if (ref != null && mouseInitialPosition.current) {
+                    isMouseDown.current = false
+                    const { ctx, cty } = getTranslation(e.offsetX, e.offsetY)
+                    previousTranslation.current.x = ctx
+                    previousTranslation.current.y = cty
+                    mouseInitialPosition.current = null
+                    onImageDrag(ctx, cty)
+                }
+                break
+            case 'touchecancel':
+            case 'touchend':
+                if (ref != null && mouseInitialPosition.current) {
+                    isMouseDown.current = false
+                    const { ctx, cty } = getTranslation(
+                        e.changedTouches[0].pageX,
+                        e.changedTouches[0].pageY
+                    )
+                    previousTranslation.current.x = ctx
+                    previousTranslation.current.y = cty
+                    mouseInitialPosition.current = null
+                    onImageDrag(ctx, cty)
+                }
+                break
         }
+
     }
 
     function handleMouseDown(e) {
-        isMouseDown.current = true
-        mouseInitialPosition.current = { x: e.offsetX, y: e.offsetY }
+        switch (e.type) {
+            case 'pointerdown':
+                isMouseDown.current = true
+                mouseInitialPosition.current = { x: e.offsetX, y: e.offsetY }
+                break
+            case 'touchstart':
+                isMouseDown.current = true
+                mouseInitialPosition.current = {
+                    x: e.changedTouches[0].pageX,
+                    y: e.changedTouches[0].pageY
+                }
+                break
+        }
     }
 
-    const getTranslation = (e) => {
+    const getTranslation = (nx, ny) => {
         // Compute displacement
-        const dx = (e.offsetX - mouseInitialPosition.current.x)
-        const dy = (e.offsetY - mouseInitialPosition.current.y)
+        const dx = (nx - mouseInitialPosition.current.x)
+        const dy = (ny - mouseInitialPosition.current.y)
         // Add to previous translations
         ttx = dx + previousTranslation.current.x
         tty = dy + previousTranslation.current.y
@@ -70,10 +116,9 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
         ref.current.onpointerleave = handleMouseUpOrLeave;
 
         ref.current.ontouchmove = handleMouseMove;
-        ref.current.ontouchend = handleMouseDown;
-        ref.current.ontouchstart = handleMouseUpOrLeave;
-        ref.current.ontouchcencel = handleMouseUpOrLeave;
-
+        ref.current.ontouchend = handleMouseUpOrLeave;
+        ref.current.ontouchcancel = handleMouseUpOrLeave;
+        ref.current.ontouchstart = handleMouseDown;
     }, [image, imageSettings, canvasSize, onImageDrag])
 
     return (

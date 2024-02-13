@@ -4,7 +4,6 @@ import { Image } from 'image-js';
 import React, { useEffect, useRef, useState } from "react";
 
 import { ImageDownloadButton, ImageInputButton, InteractiveImageViewer, MainAppBar, SliderBorderSize, SliderRatio, SliderZoom } from './components';
-import { getProcessedImage } from './utils';
 
 
 export function App() {
@@ -89,10 +88,10 @@ export function App() {
 
 
     const handleDownload = (e) => {
-        const link = document.createElement('a');
-        link.download = 'image';
-        link.href = getProcessedImage(image, imageSettings).toDataURL();
-        link.click();
+        // const link = document.createElement('a');
+        // link.download = 'image';
+        // link.href = getProcessedImage(image, imageSettings).toDataURL();
+        // link.click();
     };
 
 

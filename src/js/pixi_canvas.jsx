@@ -1,5 +1,8 @@
 import { Graphics, Sprite, Stage } from '@pixi/react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { NoSsr } from '@mui/base/NoSsr';
+
+import Button from "@mui/material/Button";
 
 export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDrag }) {
 
@@ -11,9 +14,26 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
     )
 
     const ref = useRef(null)
+    const [app, setApp] = useState();
     const isMouseDown = useRef(false)
     const mouseInitialPosition = useRef(null)
     const previousTranslation = useRef({ x: 0, y: 0 })
+
+    const exportImage = () => {
+        if (app) {
+            console.log(app.renderer.extract);
+            console.log(app.renderer.plugins.extract);
+        }
+
+        // const image = app.renderer.plugins.extract.image(app.stage, "image/jpeg", 0.97);
+        // const image = await app.renderer.plugins.extract.base64();
+        // const createEl = document.createElement("a");
+        // createEl.href = image.src;
+        // createEl.download = "my-canvas"; 
+        // createEl.click();
+        // createEl.remove();
+    };
+
 
     function handleMouseMove(e) {
         switch (e.type) {
@@ -110,22 +130,29 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
     }, [image, imageSettings, canvasSize, onImageDrag])
 
     return (
-        <div ref={ref}>
-            <Stage
-                width={cW}
-                height={cW / imageSettings.ratio}
-                options={{ backgroundColor: 0xCCBBBB }}>
-                <Sprite
-                    image={imgDataURL}
-                    width={dW}
-                    height={dH}
-                    anchor={0.5}
-                    x={px}
-                    y={py}
-                />
-                <Graphics draw={draw} />
-            </Stage>
-        </div>
+        <>
+            <Button variant="contained" onClick={exportImage}>DOWNLOAD</Button>
+            <div ref={ref}>
+                <NoSsr>
+                    <Stage
+                        width={cW}
+                        height={cW / imageSettings.ratio}
+                        options={{ backgroundColor: 0xCCBBBB }}
+                        onMount={(app) => { console.log("mounted"); setApp(app) }}
+                    >
+                        <Sprite
+                            image={imgDataURL}
+                            width={dW}
+                            height={dH}
+                            anchor={0.5}
+                            x={px}
+                            y={py}
+                        />
+                        <Graphics draw={draw} />
+                    </Stage>
+                </NoSsr>
+            </div>
+        </>
     );
 }
 

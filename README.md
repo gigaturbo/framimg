@@ -34,29 +34,8 @@ https://github.com/retyui/react-quick-pinch-zoom/blob/master/docs/api/README.md
 https://necolas.github.io/react-native-web/docs/setup/
 https://necolas.github.io/react-native-web/docs/multi-platform/#compiling-and-bundling
 https://developer.mozilla.org/en-US/docs/Web/API/Touch_events#interfaces
-
-optionalDependencies:
-    "@img/sharp-darwin-arm64" "0.33.2"
-    "@img/sharp-darwin-x64" "0.33.2"
-    "@img/sharp-libvips-darwin-arm64" "1.0.1"
-    "@img/sharp-libvips-darwin-x64" "1.0.1"
-    "@img/sharp-libvips-linux-arm" "1.0.1"
-    "@img/sharp-libvips-linux-arm64" "1.0.1"
-    "@img/sharp-libvips-linux-s390x" "1.0.1"
-    "@img/sharp-libvips-linux-x64" "1.0.1"
-    "@img/sharp-libvips-linuxmusl-arm64" "1.0.1"
-    "@img/sharp-libvips-linuxmusl-x64" "1.0.1"
-    "@img/sharp-linux-arm" "0.33.2"
-    "@img/sharp-linux-arm64" "0.33.2"
-    "@img/sharp-linux-s390x" "0.33.2"
-    "@img/sharp-linux-x64" "0.33.2"
-    "@img/sharp-linuxmusl-arm64" "0.33.2"
-    "@img/sharp-linuxmusl-x64" "0.33.2"
-    "@img/sharp-wasm32" "0.33.2"
-    "@img/sharp-win32-ia32" "0.33.2"
-    "@img/sharp-win32-x64" "0.33.2"
-
-
+https://www.bha.ee/how-to-make-your-parcel-js-app-progressive/
+https://developer.mozilla.org/en-US/docs/Web/Manifest/share_target
 
 pilege
 imageSettings    : border | out_ratio | zoom

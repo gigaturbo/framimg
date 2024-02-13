@@ -57,10 +57,11 @@
   },
   "scripts": {
     "start": "parcel",
-    "build": "parcel build",
+    "build": "rm -rf ./dist & parcel build",
     "postbuild": "workbox generateSW",
     "cleanstart": "rm -rf ./.parcel-cache ./dist & parcel ",
-    "cleaninstall": "rm -rf ./node_modules ./yarn.lock & yarn install"
+    "cleaninstall": "rm -rf ./node_modules ./yarn.lock & yarn install",
+    "install": "rm -rf /var/www/my_webapp/www/* & cp dist/* /var/www/my_webapp/www/"
   },
   "source": "src/index.html",
   "targets": {

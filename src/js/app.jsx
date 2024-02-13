@@ -88,10 +88,10 @@ export function App() {
 
 
     const handleDownload = (e) => {
-        // const link = document.createElement('a');
-        // link.download = 'image';
-        // link.href = getProcessedImage(image, imageSettings).toDataURL();
-        // link.click();
+        const link = document.createElement('a');
+        link.download = 'image';
+        link.href = getProcessedImage(image, imageSettings).toDataURL();
+        link.click();
     };
 
 

@@ -1,6 +1,8 @@
 import { Graphics, Sprite, Stage } from '@pixi/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NoSsr } from '@mui/base/NoSsr';
+import Box from '@mui/material/Box';
+
 
 import Button from "@mui/material/Button";
 
@@ -131,27 +133,25 @@ export default function PixiCanvas({ image, imageSettings, canvasSize, onImageDr
 
     return (
         <>
-            <Button variant="contained" onClick={exportImage}>DOWNLOAD</Button>
-            <div ref={ref}>
-                <NoSsr>
-                    <Stage
-                        width={cW}
-                        height={cW / imageSettings.ratio}
-                        options={{ backgroundColor: 0xCCBBBB }}
-                        onMount={(app) => { console.log("mounted"); setApp(app) }}
-                    >
-                        <Sprite
-                            image={imgDataURL}
-                            width={dW}
-                            height={dH}
-                            anchor={0.5}
-                            x={px}
-                            y={py}
-                        />
-                        <Graphics draw={draw} />
-                    </Stage>
-                </NoSsr>
-            </div>
+            {/* <Button variant="contained" onClick={exportImage}>DOWNLOAD!</Button> */}
+            <Box ref={ref} sx={{ backgroundColor: "#AA0000", m: 0, p: 0 }}>
+                <Stage
+                    width={cW}
+                    height={cW / imageSettings.ratio}
+                    options={{ backgroundColor: 0xCCBBBB }}
+                    onMount={(app) => { console.log("mounted"); setApp(app) }}
+                >
+                    <Sprite
+                        image={imgDataURL}
+                        width={dW}
+                        height={dH}
+                        anchor={0.5}
+                        x={px}
+                        y={py}
+                    />
+                    <Graphics draw={draw} />
+                </Stage>
+            </Box>
         </>
     );
 }

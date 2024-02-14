@@ -1,3 +1,4 @@
+import { NoSsr } from '@mui/base/NoSsr';
 import CssBaseline from '@mui/material/CssBaseline';
 import { green, indigo } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -22,8 +23,11 @@ const container = document.getElementById("root");
 const root = createRoot(container)
 root.render(
     <StrictMode>
+        {/* <NoSsr> */}
         <CssBaseline />
         <ThemeProvider theme={theme}>
             <App />
         </ThemeProvider>
-    </StrictMode>);
+        {/* </NoSsr> */}
+    </StrictMode>
+);

@@ -37,6 +37,10 @@ https://developer.mozilla.org/en-US/docs/Web/API/Touch_events#interfaces
 https://www.bha.ee/how-to-make-your-parcel-js-app-progressive/
 https://developer.mozilla.org/en-US/docs/Web/Manifest/share_target
 
+https://stackoverflow.com/questions/40838963/why-mouseup-mousedown-are-not-working-on-mobile-browser
+https://developer.mozilla.org/en-US/docs/Web/API/Element/pointercancel_event
+https://github.com/w3c/pointerevents/issues/346
+
 pilege
 imageSettings    : border | out_ratio | zoom
 computedSettings : max_translation=f(out_ratio, zoom) | crp_ratio=f(border, out_ratio) | padding=f(border, crp_ratio, crp_size)

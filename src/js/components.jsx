@@ -4,7 +4,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import MenuIcon from '@mui/icons-material/Menu';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import Rotate90DegreesCcwIcon from '@mui/icons-material/Rotate90DegreesCcw';
+import CropRotateIcon from '@mui/icons-material/CropRotate';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { RemoveScroll } from 'react-remove-scroll';
 import PixiCanvas from './pixi_canvas.jsx';
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 
 export function MainAppBar({ loadButton, downloadButton }) {
@@ -66,35 +66,27 @@ export function InteractiveImageViewer({ image, imageSettings, canvasSize, onIma
 export function SliderRatio({ imageSettings, onSliderChange, onRotateClick }) {
 
     const allowedRatios = useMemo(() => {
-        return [[1, 1], [10, 8], [5, 4], [4, 3], [3, 2], [8, 5], [16, 9], [2, 1]]
+        return [[1, 1], [7, 6], [5, 4], [4, 3], [3, 2], [8, 5], [16, 9], [2, 1]]
     }, [])
 
     const ratioMarks = useMemo(() => {
-        switch (imageSettings.orientation) {
-            case 'LANDSCAPE':
-                return allowedRatios.map((el) => {
-                    return { value: el[0] / el[1], label: `${el[0]}:${el[1]}` }
-                });
-            case 'PORTRAIT':
-                return allowedRatios.map((el) => {
-                    return { value: el[1] / el[0], label: `${el[1]}:${el[0]}` }
-                });
-            default:
-                return allowedRatios.map((el) => {
-                    return { value: el[0] / el[1], label: `${el[0]}:${el[1]}` }
-                });
-        }
-    }, [imageSettings.orientation, allowedRatios])
+        const [i, j] = imageSettings.orientation == 'LANDSCAPE' ? [0, 1] : [1, 0]
+        return allowedRatios.map((el) => { return { value: el[i] / el[j], label: `${el[i]}:${el[j]}` } });
+    }, [allowedRatios, imageSettings.orientation])
 
-    //TODO COMPUTE MIN
     const minV = useMemo(() => {
-        return imageSettings.orientation == 'LANDSCAPE' ? 1 : 1 / 2
-    }, [imageSettings.orientation])
+        const [i, j] = imageSettings.orientation == 'LANDSCAPE' ? [0, 1] : [1, 0]
+        const v = allowedRatios.reduce((a, b) => (a[i] / a[j] < b[i] / b[j]) ? a : b)
+        return v[i] / v[j];
+    }, [allowedRatios, imageSettings.orientation])
 
-    //TODO COMPUTE MAX
     const maxV = useMemo(() => {
-        return imageSettings.orientation == 'LANDSCAPE' ? 2 : 1
-    }, [imageSettings.orientation])
+        const [i, j] = imageSettings.orientation == 'LANDSCAPE' ? [0, 1] : [1, 0]
+        const v = allowedRatios.reduce((a, b) => (a[i] / a[j] > b[i] / b[j]) ? a : b)
+        return v[i] / v[j];
+    }, [allowedRatios, imageSettings.orientation])
+
+    const valueRatioFormat = useCallback((value) => value.toFixed(2), [])
 
     return (
         <Stack spacing={2} direction="row" sx={{ mb: 2 }} alignItems="center">
@@ -108,11 +100,12 @@ export function SliderRatio({ imageSettings, onSliderChange, onRotateClick }) {
                 aria-label="Default"
                 valueLabelDisplay="auto"
                 value={imageSettings.ratio}
-                getAriaValueText={(v) => { `${v}` }}
+                valueLabelFormat={valueRatioFormat}
+                getAriaValueText={(v) => { `${valueRatioFormat(v)}` }}
                 onChange={onSliderChange}
             />
             <IconButton onClick={onRotateClick}>
-                <Rotate90DegreesCcwIcon />
+                <CropRotateIcon />
             </IconButton>
         </Stack>
     );
@@ -120,8 +113,11 @@ export function SliderRatio({ imageSettings, onSliderChange, onRotateClick }) {
 
 
 export function SliderBorderSize({ imageSettings, onChange }) {
+
+    const valueBorderFormat = useCallback((value) => `${value.toFixed(0)}%`, [])
+
     return (
-        <Stack spacing={2} direction="row" sx={{ mb: 0.5 }} alignItems="center">
+        <Stack spacing={2} direction="row" sx={{ mb: 0.2 }} alignItems="center">
             <LineWeightIcon />
             <Slider
                 defaultValue={0}
@@ -132,7 +128,8 @@ export function SliderBorderSize({ imageSettings, onChange }) {
                 aria-label="Default"
                 valueLabelDisplay="auto"
                 value={imageSettings.borderSize}
-                getAriaValueText={(v) => { `${v}%` }}
+                valueLabelFormat={valueBorderFormat}
+                getAriaValueText={(v) => { `${valueBorderFormat(v)}%` }}
                 onChange={onChange}
             />
         </Stack>
@@ -141,8 +138,11 @@ export function SliderBorderSize({ imageSettings, onChange }) {
 
 
 export function SliderZoom({ imageSettings, onChange }) {
+
+    const valueZoomFormat = useCallback((value) => `${(value * 100).toFixed(0)}%`, [])
+
     return (
-        <Stack spacing={2} direction="row" sx={{ mb: 0.5 }} alignItems="center">
+        <Stack spacing={2} direction="row" sx={{ mb: 0.2 }} alignItems="center">
             <ZoomInIcon />
             <Slider
                 defaultValue={1}
@@ -152,7 +152,8 @@ export function SliderZoom({ imageSettings, onChange }) {
                 aria-label="Default"
                 valueLabelDisplay="auto"
                 value={imageSettings.zoom}
-                getAriaValueText={(v) => { `${parseInt(v * 100)}%` }}
+                valueLabelFormat={valueZoomFormat}
+                getAriaValueText={(v) => { `${valueZoomFormat(v)}%` }}
                 onChange={onChange}
             />
         </Stack>

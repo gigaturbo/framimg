@@ -42,9 +42,15 @@ d = (b*cW)/2(1-b)
 
 ### TODO
 
-- [ ] min max slider ratio
+- [x] min max slider ratio
 - [ ] max image height
 - [ ] max width on large display
 - [ ] UI change on large display?
-- [ ] fast image loading
-- [ ] 
+- [ ] fast image loading/ no DataURL
+- [ ] exported image name and exif data
+- [ ] configurable export format (png, jpeg, quality, resizeif, )
+- [ ] image export method (interpolation, roundpixels, size, etc)
+- [ ] configure innerRatio/real image ratio
+- [ ] pinch to zoom?
+- [ ] set slider exact value on click
+- [ ] even slider ratio scaling (1/x scale)

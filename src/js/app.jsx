@@ -18,6 +18,7 @@ export function App() {
         ratio: 3 / 2,
         angle: 0,
         ratioMode: 'OUTPUT_RATIO',
+        orientation: 'LANDSCAPE',
         translation: { x: 0, y: 0 }
     })
 
@@ -87,6 +88,14 @@ export function App() {
         nSettings.translation.y = ty
         setImageSettings(nSettings)
     }
+
+
+    const handleOrientatioChange = (e) => {
+        let nSettings = { ...imageSettings }
+        nSettings.orientation = nSettings.orientation == 'LANDSCAPE' ? 'PORTRAIT' : 'LANDSCAPE'
+        nSettings.ratio = 1.0 / nSettings.ratio
+        setImageSettings(nSettings)
+    };
 
 
     const handleExportImage = useCallback(async (e) => {
@@ -197,7 +206,9 @@ export function App() {
                     <Grid xs={12}>
                         <SliderRatio
                             imageSettings={imageSettings}
-                            onChange={(e) => handleImageSettingsChanged(e, "ratio")} />
+                            onSliderChange={(e) => handleImageSettingsChanged(e, "ratio")}
+                            onRotateClick={handleOrientatioChange}
+                        />
                     </Grid>
                 </Grid>
             </Grid>

@@ -1,7 +1,8 @@
-import Box from "@mui/material/Box";
+import { Box, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Image } from "image-js";
-import { Application, Graphics, Sprite, Container } from "pixi.js";
+import { Application, Graphics, Sprite } from "pixi.js";
+import * as PIXI from "pixi.js";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ImageDownloadButton,
@@ -13,7 +14,14 @@ import {
   SliderZoom,
 } from "./components";
 import { calcParams } from "./utils";
-import SETTINGS from "./settings";
+// import {SETTINGS} from "./settings";
+
+const SETTINGS = {
+  "export": { quality: 97, type: "image/jpeg" },
+  "render": { roundPixels: true, antialias: false, autoDensity: true },
+  "image": { borderColor: 0xffffff, backgroundColor: 0xffff00 },
+  "ui": { backgroundColor: "#777777" },
+};
 
 export function App() {
   const [canvasSize, setCanvasSize] = useState({ w: 0, h: 0 });
@@ -75,6 +83,8 @@ export function App() {
   // Settings changed
   const handleImageSettingsChanged = (e, keyToUpdate) => {
     let settings = { ...imageSettings };
+    console.log(e)
+    console.log(keyToUpdate)
     settings[keyToUpdate] = e.target.value;
     setImageSettings(settings);
   };
@@ -118,7 +128,7 @@ export function App() {
     mask.drawRect(0, 0, cW, cH);
     mask.endFill();
 
-    const container = new Container();
+    const container = new PIXI.Container();
     app.stage.addChild(container);
     container.x = cW / 2;
     container.y = cH / 2;
@@ -195,17 +205,22 @@ export function App() {
       </Grid>
 
       {/* CANVAS */}
-      <Box ref={canvasGridContainerRef}>
-        <InteractiveImageViewer
-          image={image}
-          imageSettings={imageSettings}
-          canvasSize={canvasSize}
-          onImageDrag={handleImageDrag}
-        />
-      </Box>
+      <Container
+        sx={{ backgroundColor: "#005588", p: 0, margin: "auto" }}
+        maxWidth="sm"
+      >
+        <Box sx={{ backgroundColor: "#553388" }} ref={canvasGridContainerRef}>
+          <InteractiveImageViewer
+            image={image}
+            imageSettings={imageSettings}
+            canvasSize={canvasSize}
+            onImageDrag={handleImageDrag}
+          />
+        </Box>
+      </Container>
 
       {/* FILL */}
-      <Box sx={{ marginTop: "auto" }}></Box>
+      {/* <Box sx={{ marginTop: "auto", backgroundColor: "#883355" }}></Box> */}
 
       {/* BUTTONS */}
       <Grid xs={12} container spacing={2}>

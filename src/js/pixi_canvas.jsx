@@ -2,10 +2,17 @@ import { Box } from "@mui/material";
 import { Graphics, Sprite, Stage } from "@pixi/react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { calcParams } from "./utils";
-import SETTINGS from "./settings";
+// import {SETTINGS} from "./settings";
+
+const SETTINGS = {
+  "export": { quality: 97, type: "image/jpeg" },
+  "render": { roundPixels: true, antialias: false, autoDensity: true },
+  "image": { borderColor: 0xffffff, backgroundColor: 0xffff00 },
+  "ui": { backgroundColor: "#777777" },
+};
 
 export default function PixiCanvas({
-  image,
+  image,  
   imageSettings,
   canvasSize,
   onImageDrag,

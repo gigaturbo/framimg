@@ -17,10 +17,10 @@ import { calcParams } from "./utils";
 // import {SETTINGS} from "./settings";
 
 const SETTINGS = {
-  "export": { quality: 97, type: "image/jpeg" },
-  "render": { roundPixels: true, antialias: false, autoDensity: true },
-  "image": { borderColor: 0xffffff, backgroundColor: 0xffff00 },
-  "ui": { backgroundColor: "#777777" },
+  extract: { quality: 97, type: "image/jpeg" },
+  render: { roundPixels: true, antialias: false, autoDensity: true },
+  image: { borderColor: 0xffffff, backgroundColor: 0xffff00 },
+  ui: { backgroundColor: "#777777" },
 };
 
 export function App() {
@@ -83,8 +83,8 @@ export function App() {
   // Settings changed
   const handleImageSettingsChanged = (e, keyToUpdate) => {
     let settings = { ...imageSettings };
-    console.log(e)
-    console.log(keyToUpdate)
+    console.log(e);
+    console.log(keyToUpdate);
     settings[keyToUpdate] = e.target.value;
     setImageSettings(settings);
   };
@@ -159,9 +159,9 @@ export function App() {
 
     const outputImage = await app.renderer.extract.image(
       container,
-      SETTINGS.export.type,
-      SETTINGS.export.quality,
-      frame.getBounds()
+      SETTINGS.extract.type,
+      SETTINGS.extract.quality,
+      frame.getBounds(),
     );
     const link = document.createElement("a");
     const extension = "jpg";

@@ -5,21 +5,21 @@ import { calcParams } from "./utils";
 // import {SETTINGS} from "./settings";
 
 const SETTINGS = {
-  "export": { quality: 97, type: "image/jpeg" },
-  "render": { roundPixels: true, antialias: false, autoDensity: true },
-  "image": { borderColor: 0xffffff, backgroundColor: 0xffff00 },
-  "ui": { backgroundColor: "#777777" },
+  extract: { quality: 97, type: "image/jpeg" },
+  render: { roundPixels: true, antialias: false, autoDensity: true },
+  image: { borderColor: 0xffffff, backgroundColor: 0xffff00 },
+  ui: { backgroundColor: "#777777" },
 };
 
 export default function PixiCanvas({
-  image,  
+  image,
   imageSettings,
   canvasSize,
   onImageDrag,
 }) {
   const { pad, cW, dW, dH, px, py, mtx, mty } = useMemo(
     () => calcParams(image, imageSettings, canvasSize),
-    [image, imageSettings, canvasSize]
+    [image, imageSettings, canvasSize],
   );
 
   const touchBoxRef = useRef(null);
@@ -37,7 +37,7 @@ export default function PixiCanvas({
       g.drawRect(cW - pad, pad, pad, cW / imageSettings.ratio - 2 * pad);
       g.endFill();
     },
-    [image, imageSettings, canvasSize]
+    [image, imageSettings, canvasSize],
   );
 
   useEffect(() => {

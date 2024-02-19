@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Image } from "image-js";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -194,17 +194,22 @@ export function App() {
       </Grid>
 
       {/* CANVAS */}
-      <Box ref={canvasGridContainerRef}>
-        <InteractiveImageViewer
-          image={image}
-          imageSettings={imageSettings}
-          canvasSize={canvasSize}
-          onImageDrag={handleImageDrag}
-        />
-      </Box>
+      <Container
+        sx={{ backgroundColor: "#005588", p: 0, margin: "auto" }}
+        maxWidth="sm"
+      >
+        <Box sx={{ backgroundColor: "#553388" }} ref={canvasGridContainerRef}>
+          <InteractiveImageViewer
+            image={image}
+            imageSettings={imageSettings}
+            canvasSize={canvasSize}
+            onImageDrag={handleImageDrag}
+          />
+        </Box>
+      </Container>
 
       {/* FILL */}
-      <Box sx={{ marginTop: "auto" }}></Box>
+      {/* <Box sx={{ marginTop: "auto", backgroundColor: "#883355" }}></Box> */}
 
       {/* BUTTONS */}
       <Grid xs={12} container spacing={2}>

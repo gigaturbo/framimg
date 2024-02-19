@@ -107,7 +107,7 @@ export function App() {
       h: 0,
     });
     const app = new PIXI.Application({
-      background: SETTINGS.image.backgroundColor,
+      background: "#FFFF00",
       width: cW,
       height: cH,
     });
@@ -135,7 +135,7 @@ export function App() {
 
     const frame = new PIXI.Graphics();
     photo.anchor.set(0.5);
-    frame.beginFill(SETTINGS.image.borderColor, 1);
+    frame.beginFill(0xffffff, 1);
     frame.drawRect(0, 0, cW, pad);
     frame.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
     frame.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
@@ -170,7 +170,7 @@ export function App() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        backgroundColor: "#666666",
+        backgroundColor: "#777777",
       }}
     >
       {/* APP BAR */}

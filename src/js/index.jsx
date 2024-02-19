@@ -11,6 +11,11 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
+// settings.RESOLUTION = window.devicePixelRatio;
+// settings.RENDER_OPTIONS.antialias = false; //SETTINGS.render.antialias;
+// settings.RENDER_OPTIONS.autoDensity = true; //SETTINGS.render.autoDensity;
+// settings.ROUND_PIXELS = true; //SETTINGS.render.roundPixels;
+
 const theme = createTheme({
   palette: {
     primary: indigo,

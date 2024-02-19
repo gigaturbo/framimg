@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Graphics, Sprite, Stage } from "@pixi/react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { calcParams } from "./utils";
@@ -10,11 +10,7 @@ export default function PixiCanvas({
   onImageDrag,
   ...props
 }) {
-  const imgDataURL = useMemo(() => {
-    return image.toDataURL();
-  }, [image]);
-
-  const { pad, cW, cH, dW, dH, px, py, mtx, mty } = useMemo(
+  const { pad, cW, dW, dH, px, py, mtx, mty } = useMemo(
     () => calcParams(image, imageSettings, canvasSize),
     [image, imageSettings, canvasSize],
   );
@@ -93,7 +89,7 @@ export default function PixiCanvas({
     <>
       <Box
         ref={touchBoxRef}
-        sx={{ backgroundColor: "#FF0000", height: "auto" }}
+        sx={{ backgroundColor: "#FF0000", m: 0, p: 0 }}
         pointerEvents={"auto"}
       >
         <Stage
@@ -102,7 +98,7 @@ export default function PixiCanvas({
           options={{ backgroundColor: 0xffffff }}
         >
           <Sprite
-            image={imgDataURL}
+            image={image.dataURL}
             width={dW}
             height={dH}
             anchor={0.5}

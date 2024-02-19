@@ -2,55 +2,55 @@
 <html lang="en">
 
 <head>
-    <title>Framimg</title>
-    <link rel="shortcut icon" href="./public/favicon.ico" />
-    <link rel="apple-touch-icon" href="./public/logo192.png" />
-    <link rel="manifest" href="./manifest.webmanifest" />
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#000000" />
+  <title>Framimg</title>
+  <link rel="shortcut icon" href="./public/favicon.ico" />
+  <link rel="apple-touch-icon" href="./public/logo192.png" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000" />
 </head>
 
 <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script type="module" src="js/index.jsx"></script>
-    <script>
-        const sw = "service-worker.js";
-        navigator.serviceWorker
-            .register(sw)
-            .then(registration => {
-                registration.onupdatefound = () => {
-                    const installingWorker = registration.installing;
-                    if (installingWorker == null) {
-                        return;
-                    }
-                    installingWorker.onstatechange = () => {
-                        if (installingWorker.state === "installed") {
-                            if (navigator.serviceWorker.controller) {
-                                console.log(
-                                    "New content is available and will be used when all " +
-                                    "tabs for this page are closed. See https://bit.ly/CRA-PWA."
-                                );
-                            } else {
-                                console.log("Content is cached for offline use.");
-                            }
-                        }
-                    };
-                };
-            })
-            .catch(error => {
-                console.error("Error during service worker registration:", error);
-            });
-    </script>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script type="module" src="js/index.jsx"></script>
+  <script>
+    const sw = "service-worker.js";
+    navigator.serviceWorker
+    .register(sw)
+    .then(registration => {
+      registration.onupdatefound = () => {
+        const installingWorker = registration.installing;
+        if (installingWorker == null) {
+          return;
+        }
+        installingWorker.onstatechange = () => {
+          if (installingWorker.state === "installed") {
+            if (navigator.serviceWorker.controller) {
+              console.log(
+              "New content is available and will be used when all " +
+              "tabs for this page are closed. See https://bit.ly/CRA-PWA."
+              );
+            } else {
+              console.log("Content is cached for offline use.");
+            }
+          }
+        };
+      };
+    })
+    .catch(error => {
+      console.error("Error during service worker registration:", error);
+    });
+  </script>
 </body>
 
 <style>
-    body {
-        margin: 0px;
-        padding: 0px;
-    }
+  body {
+    margin: 0px;
+    padding: 0px;
+  }
 </style>
 
 </html>

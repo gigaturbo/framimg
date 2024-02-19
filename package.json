@@ -63,7 +63,7 @@
   },
   "scripts": {
     "start": "parcel",
-    "build": "rm -rf ./dist && parcel build",
+    "build": "rm -rf ./dist ./parce-cache && parcel build",
     "postbuild": "workbox generateSW",
     "cleanstart": "rm -rf ./.parcel-cache ./dist && parcel ",
     "installpkg": "rm -rf ./node_modules ./yarn.lock && yarn install",

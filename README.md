@@ -1,9 +1,9 @@
-### Pipeline 
+### Pipeline
 
 **Case 1 crop**
 
 cR = (1 - b)/(oH/oW - b)
-d = (b*cW)/2(1-b)
+d = (b\*cW)/2(1-b)
 
 ### Helped me
 
@@ -47,11 +47,12 @@ d = (b*cW)/2(1-b)
 - [ ] max image height
 - [ ] max width on large display
 - [ ] UI change on large display?
-- [ ] fast image loading/ no DataURL
+- [x] fast image loading
+- [ ] load image without dataURL
 - [ ] exported image name and exif data
 - [ ] configurable export format (png, jpeg, quality, resizeif, )
 - [ ] image export method (interpolation, roundpixels, size, etc)
 - [ ] configure innerRatio/real image ratio
 - [ ] pinch to zoom?
 - [ ] set slider exact value on click
-- [ ] even slider ratio scaling (1/x scale)
+- [ ] even slider ratio scaling (1/x scale)?

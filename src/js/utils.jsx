@@ -92,8 +92,16 @@ export const getProcessingParameters = (image, imageSettings) => {
 export const calcParams = (image, imageSettings, canvasSize, raw = false) => {
   const b = imageSettings.borderSize;
   const R = image.width / image.height; // raw image ratio
-  const cW = canvasSize.w; // canvas width
-  const cH = canvasSize.w / imageSettings.ratio; // canvas height
+  let cW, cH;
+  console.log(`CALC: avail canvas ${canvasSize.w} ${canvasSize.h}`);
+  if (canvasSize.h >= canvasSize.w / imageSettings.ratio) {
+    cW = parseInt(canvasSize.w);
+    cH = parseInt(cW / imageSettings.ratio);
+  } else {
+    cH = parseInt(canvasSize.h);
+    cW = parseInt(cH * imageSettings.ratio);
+  }
+  console.log(`CALC: final canvas  ${cW} ${cH}`);
   const pad = cW * (b / 200); // padding in pixels per side
   const iH = cH - pad * 2; // inner height
   const iW = cW - pad * 2; // inner width

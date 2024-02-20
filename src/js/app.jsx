@@ -37,6 +37,7 @@ export function App() {
     function handleWindowResize() {
       const w = canvasGridContainerRef.current.offsetWidth;
       const h = canvasGridContainerRef.current.offsetHeight;
+      console.log(`Resize window ${w} ${h}`);
       setCanvasSize({ w: w, h: h });
     }
     window.addEventListener("resize", handleWindowResize);
@@ -45,6 +46,16 @@ export function App() {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
+  // Canvas size
+  useEffect(() => {
+    const w = canvasGridContainerRef.current.offsetWidth;
+    const h = canvasGridContainerRef.current.offsetHeight;
+    if (canvasGridContainerRef.current) {
+      console.log(`Set size ${w} ${h}`);
+      setCanvasSize({ w: w, h: h });
+    }
+  }, [canvasGridContainerRef.current]);
 
   // File change
   const handleFileChange = (e) => {
@@ -102,6 +113,7 @@ export function App() {
   };
 
   const handleExportImage = useCallback(async () => {
+    console.log("Export function");
     const { pad, cW, cH, dW, dH, px, py } = calcParams(image, imageSettings, {
       w: parseInt(image.width / imageSettings.zoom), // TODO compute real needed width here!
       h: 0,
@@ -164,6 +176,8 @@ export function App() {
 
   // HTML ----------------------------------------------------------------------------------------
 
+  // Custom element
+
   return (
     <Box
       sx={{
@@ -195,17 +209,24 @@ export function App() {
 
       {/* CANVAS */}
       <Container
-        sx={{ backgroundColor: "#005588", p: 0, margin: "auto" }}
+        ref={canvasGridContainerRef}
+        sx={{
+          backgroundColor: "#9999FF",
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          mx: "auto",
+        }}
         maxWidth="sm"
+        disableGutters
+        fixed
       >
-        <Box sx={{ backgroundColor: "#553388" }} ref={canvasGridContainerRef}>
-          <InteractiveImageViewer
-            image={image}
-            imageSettings={imageSettings}
-            canvasSize={canvasSize}
-            onImageDrag={handleImageDrag}
-          />
-        </Box>
+        <InteractiveImageViewer
+          image={image}
+          imageSettings={imageSettings}
+          canvasSize={canvasSize}
+          onImageDrag={handleImageDrag}
+        />
       </Container>
 
       {/* BUTTONS */}

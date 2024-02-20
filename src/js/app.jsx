@@ -1,8 +1,6 @@
 import { Box, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Image } from "image-js";
-import { Application, Graphics, Sprite } from "pixi.js";
-import * as PIXI from "pixi.js";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ImageDownloadButton,
@@ -14,14 +12,7 @@ import {
   SliderZoom,
 } from "./components";
 import { calcParams } from "./utils";
-// import {SETTINGS} from "./settings";
-
-const SETTINGS = {
-  extract: { quality: 97, type: "image/jpeg" },
-  render: { roundPixels: true, antialias: false, autoDensity: true },
-  image: { borderColor: 0xffffff, backgroundColor: 0xffff00 },
-  ui: { backgroundColor: "#777777" },
-};
+import * as PIXI from "pixi.js";
 
 export function App() {
   const [canvasSize, setCanvasSize] = useState({ w: 0, h: 0 });
@@ -83,8 +74,6 @@ export function App() {
   // Settings changed
   const handleImageSettingsChanged = (e, keyToUpdate) => {
     let settings = { ...imageSettings };
-    console.log(e);
-    console.log(keyToUpdate);
     settings[keyToUpdate] = e.target.value;
     setImageSettings(settings);
   };
@@ -114,16 +103,16 @@ export function App() {
 
   const handleExportImage = useCallback(async () => {
     const { pad, cW, cH, dW, dH, px, py } = calcParams(image, imageSettings, {
-      w: image.width,
+      w: parseInt(image.width / imageSettings.zoom), // TODO compute real needed width here!
       h: 0,
     });
-    const app = new Application({
-      background: SETTINGS.image.backgroundColor,
+    const app = new PIXI.Application({
+      background: "#FFFF00",
       width: cW,
       height: cH,
     });
 
-    const mask = new Graphics();
+    const mask = new PIXI.Graphics();
     mask.beginFill(0xff0000);
     mask.drawRect(0, 0, cW, cH);
     mask.endFill();
@@ -136,7 +125,7 @@ export function App() {
     container.pivot.y = cH / 2;
     container.mask = mask;
 
-    const photo = Sprite.from(image.dataURL);
+    const photo = PIXI.Sprite.from(image.dataURL);
     container.addChild(photo);
     photo.anchor.set(0.5);
     photo.x = px;
@@ -144,9 +133,9 @@ export function App() {
     photo.width = dW;
     photo.height = dH;
 
-    const frame = new Graphics();
+    const frame = new PIXI.Graphics();
     photo.anchor.set(0.5);
-    frame.beginFill(SETTINGS.image.borderColor, 1);
+    frame.beginFill(0xffffff, 1);
     frame.drawRect(0, 0, cW, pad);
     frame.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
     frame.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
@@ -159,8 +148,8 @@ export function App() {
 
     const outputImage = await app.renderer.extract.image(
       container,
-      SETTINGS.extract.type,
-      SETTINGS.extract.quality,
+      "image/jpeg",
+      0.97,
       frame.getBounds(),
     );
     const link = document.createElement("a");
@@ -181,7 +170,7 @@ export function App() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        backgroundColor: SETTINGS.ui.backgroundColor,
+        backgroundColor: "#777777",
       }}
     >
       {/* APP BAR */}
@@ -218,9 +207,6 @@ export function App() {
           />
         </Box>
       </Container>
-
-      {/* FILL */}
-      {/* <Box sx={{ marginTop: "auto", backgroundColor: "#883355" }}></Box> */}
 
       {/* BUTTONS */}
       <Grid xs={12} container spacing={2}>

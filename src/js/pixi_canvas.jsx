@@ -2,20 +2,13 @@ import { Box } from "@mui/material";
 import { Graphics, Sprite, Stage } from "@pixi/react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { calcParams } from "./utils";
-// import {SETTINGS} from "./settings";
-
-const SETTINGS = {
-  extract: { quality: 97, type: "image/jpeg" },
-  render: { roundPixels: true, antialias: false, autoDensity: true },
-  image: { borderColor: 0xffffff, backgroundColor: 0xffff00 },
-  ui: { backgroundColor: "#777777" },
-};
 
 export default function PixiCanvas({
   image,
   imageSettings,
   canvasSize,
   onImageDrag,
+  ...props
 }) {
   const { pad, cW, dW, dH, px, py, mtx, mty } = useMemo(
     () => calcParams(image, imageSettings, canvasSize),
@@ -30,7 +23,7 @@ export default function PixiCanvas({
   const draw = useCallback(
     (g) => {
       g.clear();
-      g.beginFill(SETTINGS.image.borderColor, 1);
+      g.beginFill(0xffffff, 1);
       g.drawRect(0, 0, cW, pad);
       g.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
       g.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
@@ -96,13 +89,13 @@ export default function PixiCanvas({
     <>
       <Box
         ref={touchBoxRef}
-        sx={{ backgroundColor: "#FF0000", m: 0, p: 0 }}
+        sx={{ backgroundColor: "#FF0000", height: "auto" }}
         pointerEvents={"auto"}
       >
         <Stage
           width={cW}
           height={cW / imageSettings.ratio}
-          options={{ backgroundColor: SETTINGS.image.backgroundColor }}
+          options={{ backgroundColor: 0xffffff }}
         >
           <Sprite
             image={image.dataURL}

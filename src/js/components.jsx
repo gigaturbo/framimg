@@ -88,7 +88,7 @@ export function SliderRatio({ imageSettings, onSliderChange, onRotateClick }) {
   const minV = useMemo(() => {
     const [i, j] = imageSettings.orientation == "LANDSCAPE" ? [0, 1] : [1, 0];
     const v = allowedRatios.reduce((a, b) =>
-      a[i] / a[j] < b[i] / b[j] ? a : b
+      a[i] / a[j] < b[i] / b[j] ? a : b,
     );
     return v[i] / v[j];
   }, [allowedRatios, imageSettings.orientation]);
@@ -96,7 +96,7 @@ export function SliderRatio({ imageSettings, onSliderChange, onRotateClick }) {
   const maxV = useMemo(() => {
     const [i, j] = imageSettings.orientation == "LANDSCAPE" ? [0, 1] : [1, 0];
     const v = allowedRatios.reduce((a, b) =>
-      a[i] / a[j] > b[i] / b[j] ? a : b
+      a[i] / a[j] > b[i] / b[j] ? a : b,
     );
     return v[i] / v[j];
   }, [allowedRatios, imageSettings.orientation]);
@@ -156,7 +156,7 @@ export function SliderBorderSize({ imageSettings, onChange }) {
 export function SliderZoom({ imageSettings, onChange }) {
   const valueZoomFormat = useCallback(
     (value) => `${(value * 100).toFixed(0)}%`,
-    []
+    [],
   );
 
   return (

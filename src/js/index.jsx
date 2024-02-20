@@ -1,4 +1,4 @@
-// import { NoSsr } from "@mui/base/NoSsr";
+import { NoSsr } from "@mui/base/NoSsr";
 import CssBaseline from "@mui/material/CssBaseline";
 import { green, indigo } from "@mui/material/colors";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -6,7 +6,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./app";
 import { settings } from "pixi.js";
-// import SETTINGS from "./settings";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -30,11 +29,11 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
   <StrictMode>
-    {/* <NoSsr> */}
+    <NoSsr>
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
-    {/* </NoSsr> */}
-  </StrictMode>
+    </NoSsr>
+  </StrictMode>,
 );

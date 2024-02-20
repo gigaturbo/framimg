@@ -103,7 +103,7 @@ export function App() {
 
   const handleExportImage = useCallback(async () => {
     const { pad, cW, cH, dW, dH, px, py } = calcParams(image, imageSettings, {
-      w: image.width,
+      w: image.width, // TODO compute real needed width here!
       h: 0,
     });
     const app = new PIXI.Application({
@@ -207,9 +207,6 @@ export function App() {
           />
         </Box>
       </Container>
-
-      {/* FILL */}
-      {/* <Box sx={{ marginTop: "auto", backgroundColor: "#883355" }}></Box> */}
 
       {/* BUTTONS */}
       <Grid xs={12} container spacing={2}>

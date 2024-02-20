@@ -89,11 +89,11 @@ export const getProcessingParameters = (image, imageSettings) => {
   };
 };
 
-export const calcParams = (image, imageSettings, canvasSize) => {
+export const calcParams = (image, imageSettings, canvasSize, raw = false) => {
   const b = imageSettings.borderSize;
   const R = image.width / image.height; // raw image ratio
-  const cH = canvasSize.w / imageSettings.ratio; // canvas height
   const cW = canvasSize.w; // canvas width
+  const cH = canvasSize.w / imageSettings.ratio; // canvas height
   const pad = cW * (b / 200); // padding in pixels per side
   const iH = cH - pad * 2; // inner height
   const iW = cW - pad * 2; // inner width
@@ -101,12 +101,15 @@ export const calcParams = (image, imageSettings, canvasSize) => {
 
   let zW; // zoom=1 imageWidth
   let zH; // zoom=1 imageHeight
+  let zZ = 1;
   if (R <= iR) {
     zW = iW;
     zH = iW / R;
+    zZ = iR / R;
   } else {
     zH = iH;
     zW = iH * R;
+    zZ = R / iR;
   }
 
   const dW = zW * imageSettings.zoom; // Sprite display width
@@ -133,5 +136,5 @@ export const calcParams = (image, imageSettings, canvasSize) => {
   const px = cW / 2 + ctx; // Sprite x pos
   const py = cH / 2 + cty; // Sprite y pos
 
-  return { pad, cW, cH, dW, dH, px, py, mtx, mty };
+  return { pad, cW, cH, dW, dH, px, py, mtx, mty, zZ };
 };

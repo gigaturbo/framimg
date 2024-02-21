@@ -16,7 +16,7 @@ export function App() {
   const [canvasSize, setCanvasSize] = useState({ w: 0, h: 0 });
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [image, setImage] = useState(null);
-  const { imageSettings, setImageSettings } = useImageSettings();
+  const { imageSettings, imageSettingsDispatch } = useImageSettings();
   const { appSettings } = useAppSettings();
   const canvasGridContainerRef = useRef(null);
 
@@ -60,47 +60,12 @@ export function App() {
         dataURL: er.target.result,
         file: file,
       };
-      let settings = { ...imageSettings };
-      settings.zoom = 1;
-      settings.translation = { x: 0, y: 0 };
-      settings.angle = 0;
-      setImageSettings(settings);
+      imageSettingsDispatch({ type: "reset_settings" });
       setImage(image);
       setIsImageLoading(false);
     };
     setIsImageLoading(true);
     reader.readAsDataURL(file);
-  };
-
-  // Settings changed
-  const handleImageSettingsChanged = (e, keyToUpdate) => {
-    console.log(appSettings);
-    let settings = { ...imageSettings };
-    settings[keyToUpdate] = e.target.value;
-    setImageSettings(settings);
-  };
-
-  // Zoom changed
-  const handleZoomChanged = (e) => {
-    let settings = { ...imageSettings };
-    settings.zoom = e.target.value;
-    setImageSettings(settings);
-  };
-
-  // Image dragging
-  const handleImageDrag = (tx, ty) => {
-    let nSettings = { ...imageSettings };
-    nSettings.translation.x = tx;
-    nSettings.translation.y = ty;
-    setImageSettings(nSettings);
-  };
-
-  const handleOrientationChange = (e) => {
-    let nSettings = { ...imageSettings };
-    nSettings.orientation =
-      nSettings.orientation == "LANDSCAPE" ? "PORTRAIT" : "LANDSCAPE";
-    nSettings.ratio = 1.0 / nSettings.ratio;
-    setImageSettings(nSettings);
   };
 
   const handleExportImage = useCallback(async () => {
@@ -213,31 +178,22 @@ export function App() {
         disableGutters
         fixed
       >
-        <InteractiveImageViewer
-          image={image}
-          canvasSize={canvasSize}
-          onImageDrag={handleImageDrag}
-        />
+        <InteractiveImageViewer image={image} canvasSize={canvasSize} />
       </Container>
 
       {/* BUTTONS */}
       <Grid xs={12} container spacing={2}>
         <Grid xs={12} container sx={{ px: "1.5rem", py: "2rem" }}>
           <Grid xs={12}>
-            <SliderBorderSize
-              onChange={(e) => handleImageSettingsChanged(e, "borderSize")}
-            />
+            <SliderBorderSize />
           </Grid>
 
           <Grid xs={12}>
-            <SliderZoom onChange={(e) => handleZoomChanged(e)} />
+            <SliderZoom />
           </Grid>
 
           <Grid xs={12}>
-            <SliderRatio
-              onSliderChange={(e) => handleImageSettingsChanged(e, "ratio")}
-              onRotateClick={handleOrientationChange}
-            />
+            <SliderRatio />
           </Grid>
         </Grid>
       </Grid>

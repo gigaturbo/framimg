@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useReducer } from "react";
 
 // ------------------------------------------------------------------------------------------------
 
@@ -44,10 +44,18 @@ const DEFAULT_IMG_SETTINGS = {
 const ImageSettings = createContext({ ...DEFAULT_IMG_SETTINGS });
 
 export function ImageSettingsProvider({ children }) {
-  const [imageSettings, setImageSettings] = useState({
-    ...DEFAULT_IMG_SETTINGS,
-  });
-  const value = { imageSettings, setImageSettings };
+  // const [imageSettings, setImageSettings] = useState({
+  //   ...DEFAULT_IMG_SETTINGS,
+  // });
+
+  const [imageSettings, imageSettingsDispatch] = useReducer(
+    imageSettingsReducer,
+    { ...DEFAULT_IMG_SETTINGS },
+  );
+
+  // const value = { imageSettings, setImageSettings };
+  const value = { imageSettings, imageSettingsDispatch };
+
   return (
     <ImageSettings.Provider value={value}>{children}</ImageSettings.Provider>
   );
@@ -56,4 +64,36 @@ export function ImageSettingsProvider({ children }) {
 // Context consumer hook
 export function useImageSettings() {
   return useContext(ImageSettings);
+}
+
+function imageSettingsReducer(state, action) {
+  let nState = { ...state, translation: { ...state.translation } };
+
+  switch (action.type) {
+    case "zoom_changed":
+      nState.zoom = action.newvalue;
+      break;
+    case "border_size_changed":
+      nState.borderSize = action.newvalue;
+      break;
+    case "orientation_changed":
+      nState.orientation =
+        state.orientation == "LANDSCAPE" ? "PORTRAIT" : "LANDSCAPE";
+      nState.ratio = 1.0 / state.ratio;
+      break;
+    case "image_translated":
+      nState.translation.x = action.newvalue.x;
+      nState.translation.y = action.newvalue.y;
+      break;
+    case "ratio_changed":
+      nState.ratio = action.newvalue;
+      break;
+    case "reset_settings":
+      nState.zoom = 1;
+      nState.translation = { x: 0, y: 0 };
+      nState.angle = 0;
+      break;
+  }
+
+  return nState;
 }

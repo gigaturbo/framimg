@@ -51,15 +51,11 @@ export function MainAppBar({ onImageLoad, onImageExport, isImageLoading }) {
   );
 }
 
-export function InteractiveImageViewer({ image, canvasSize, onImageDrag }) {
+export function InteractiveImageViewer({ image, canvasSize }) {
   if (image != null) {
     return (
       <RemoveScroll allowPinchZoom={false}>
-        <PixiCanvas
-          image={image}
-          canvasSize={canvasSize}
-          onImageDrag={onImageDrag}
-        />
+        <PixiCanvas image={image} canvasSize={canvasSize} />
       </RemoveScroll>
     );
   } else {
@@ -67,8 +63,8 @@ export function InteractiveImageViewer({ image, canvasSize, onImageDrag }) {
   }
 }
 
-export function SliderRatio({ onSliderChange, onRotateClick }) {
-  const { imageSettings, setImageSettings } = useImageSettings();
+export function SliderRatio() {
+  const { imageSettings, imageSettingsDispatch } = useImageSettings();
 
   const allowedRatios = useMemo(() => {
     return [
@@ -124,17 +120,28 @@ export function SliderRatio({ onSliderChange, onRotateClick }) {
         getAriaValueText={(v) => {
           `${valueRatioFormat(v)}`;
         }}
-        onChange={onSliderChange}
+        onChange={(e) =>
+          imageSettingsDispatch({
+            type: "ratio_changed",
+            newvalue: e.target.value,
+          })
+        }
       />
-      <IconButton onClick={onRotateClick}>
+      <IconButton
+        onClick={() =>
+          imageSettingsDispatch({
+            type: "orientation_changed",
+          })
+        }
+      >
         <CropRotateIcon />
       </IconButton>
     </Stack>
   );
 }
 
-export function SliderBorderSize({ onChange }) {
-  const { imageSettings, setImageSettings } = useImageSettings();
+export function SliderBorderSize() {
+  const { imageSettings, imageSettingsDispatch } = useImageSettings();
   const valueBorderFormat = useCallback((value) => `${value.toFixed(0)}%`, []);
 
   return (
@@ -153,14 +160,20 @@ export function SliderBorderSize({ onChange }) {
         getAriaValueText={(v) => {
           `${valueBorderFormat(v)}%`;
         }}
-        onChange={onChange}
+        onChange={(e) =>
+          imageSettingsDispatch({
+            type: "border_size_changed",
+            newvalue: e.target.value,
+          })
+        }
       />
     </Stack>
   );
 }
 
-export function SliderZoom({ onChange }) {
-  const { imageSettings, setImageSettings } = useImageSettings();
+export function SliderZoom() {
+  const { imageSettings, imageSettingsDispatch } = useImageSettings();
+
   const valueZoomFormat = useCallback(
     (value) => `${(value * 100).toFixed(0)}%`,
     [],
@@ -178,10 +191,13 @@ export function SliderZoom({ onChange }) {
         valueLabelDisplay="auto"
         value={imageSettings.zoom}
         valueLabelFormat={valueZoomFormat}
-        getAriaValueText={(v) => {
-          `${valueZoomFormat(v)}%`;
-        }}
-        onChange={onChange}
+        getAriaValueText={(v) => `${valueZoomFormat(v)}%`}
+        onChange={(e) =>
+          imageSettingsDispatch({
+            type: "zoom_changed",
+            newvalue: e.target.value,
+          })
+        }
       />
     </Stack>
   );

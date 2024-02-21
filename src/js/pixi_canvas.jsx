@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { calcParams } from "./utils";
 import { useAppSettings, useImageSettings } from "./providers";
 
-export default function PixiCanvas({ image, canvasSize, onImageDrag }) {
-  const { imageSettings } = useImageSettings();
+export default function PixiCanvas({ image, canvasSize }) {
+  const { imageSettings, imageSettingsDispatch } = useImageSettings();
   const { appSettings } = useAppSettings();
 
   const { pad, cW, cH, dW, dH, px, py, mtx, mty } = useMemo(
@@ -38,7 +38,7 @@ export default function PixiCanvas({ image, canvasSize, onImageDrag }) {
     touchBoxRef.current.onpointerout = handleMouseUpOrLeave;
     touchBoxRef.current.onpointerleave = handleMouseUpOrLeave;
     touchBoxRef.current.onpointercancel = handleMouseUpOrLeave;
-  }, [image, imageSettings, canvasSize, onImageDrag]);
+  }, []); // image, imageSettings, canvasSize
 
   function handleMouseMove(e) {
     if (
@@ -48,7 +48,10 @@ export default function PixiCanvas({ image, canvasSize, onImageDrag }) {
       isMouseDown.current
     ) {
       const { ctx, cty } = getTranslation(e.offsetX, e.offsetY);
-      onImageDrag(ctx, cty);
+      imageSettingsDispatch({
+        type: "image_translated",
+        newvalue: { x: ctx, y: cty },
+      });
     }
   }
 
@@ -59,7 +62,10 @@ export default function PixiCanvas({ image, canvasSize, onImageDrag }) {
       previousTranslation.current.x = ctx;
       previousTranslation.current.y = cty;
       mouseInitialPosition.current = null;
-      onImageDrag(ctx, cty);
+      imageSettingsDispatch({
+        type: "image_translated",
+        newvalue: { x: ctx, y: cty },
+      });
     }
   }
 

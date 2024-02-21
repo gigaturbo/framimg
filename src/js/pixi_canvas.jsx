@@ -2,14 +2,12 @@ import { Box, Container } from "@mui/material";
 import { Graphics, Sprite, Stage } from "@pixi/react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { calcParams } from "./utils";
-import { useAppSettings } from "./app_settings";
+import { useAppSettings, useImageSettings } from "./providers";
 
-export default function PixiCanvas({
-  image,
-  imageSettings,
-  canvasSize,
-  onImageDrag,
-}) {
+export default function PixiCanvas({ image, canvasSize, onImageDrag }) {
+  const { imageSettings } = useImageSettings();
+  const { appSettings } = useAppSettings();
+
   const { pad, cW, cH, dW, dH, px, py, mtx, mty } = useMemo(
     () => calcParams(image, imageSettings, canvasSize),
     [image, imageSettings, canvasSize],
@@ -19,8 +17,6 @@ export default function PixiCanvas({
   const isMouseDown = useRef(false);
   const mouseInitialPosition = useRef(null);
   const previousTranslation = useRef({ x: 0, y: 0 });
-
-  const { appSettings } = useAppSettings();
 
   const draw = useCallback(
     (g) => {

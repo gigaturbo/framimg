@@ -1,23 +1,14 @@
 import { Box, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Image } from "image-js";
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useContext,
-} from "react";
-import {
-  ImageDownloadButton,
-  ImageInputButton,
-  InteractiveImageViewer,
-  MainAppBar,
-  SliderBorderSize,
-  SliderRatio,
-  SliderZoom,
-} from "./components";
-import { useAppSettings } from "./app_settings";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
+import { InteractiveImageViewer } from "./components";
+import { MainAppBar } from "./components";
+import { SliderBorderSize } from "./components";
+import { SliderRatio } from "./components";
+import { SliderZoom } from "./components";
+import { useAppSettings, useImageSettings } from "./providers";
 import { calcParams } from "./utils";
 import * as PIXI from "pixi.js";
 
@@ -25,16 +16,8 @@ export function App() {
   const [canvasSize, setCanvasSize] = useState({ w: 0, h: 0 });
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [image, setImage] = useState(null);
-  const [imageSettings, setImageSettings] = useState({
-    zoom: 1,
-    borderSize: 10,
-    ratio: 3 / 2,
-    angle: 0,
-    ratioMode: "OUTPUT_RATIO",
-    orientation: "LANDSCAPE",
-    translation: { x: 0, y: 0 },
-  });
-
+  const { imageSettings, setImageSettings } = useImageSettings();
+  const { appSettings } = useAppSettings();
   const canvasGridContainerRef = useRef(null);
 
   // EVENTS --------------------------------------------------------------------------------------
@@ -53,8 +36,6 @@ export function App() {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
-
-  const { appSettings } = useAppSettings();
 
   // Canvas size
   useEffect(() => {
@@ -211,18 +192,9 @@ export function App() {
       <Grid container>
         <Grid xs={12}>
           <MainAppBar
-            loadButton={
-              <ImageInputButton
-                loading={isImageLoading}
-                onChange={handleFileChange}
-              />
-            }
-            downloadButton={
-              <ImageDownloadButton
-                disabled={isImageLoading || image === null}
-                onClick={handleExportImage}
-              />
-            }
+            onImageExport={handleExportImage}
+            onImageLoad={handleFileChange}
+            isImageLoading={isImageLoading}
           />
         </Grid>
       </Grid>
@@ -243,7 +215,6 @@ export function App() {
       >
         <InteractiveImageViewer
           image={image}
-          imageSettings={imageSettings}
           canvasSize={canvasSize}
           onImageDrag={handleImageDrag}
         />
@@ -254,21 +225,16 @@ export function App() {
         <Grid xs={12} container sx={{ px: "1.5rem", py: "2rem" }}>
           <Grid xs={12}>
             <SliderBorderSize
-              imageSettings={imageSettings}
               onChange={(e) => handleImageSettingsChanged(e, "borderSize")}
             />
           </Grid>
 
           <Grid xs={12}>
-            <SliderZoom
-              imageSettings={imageSettings}
-              onChange={(e) => handleZoomChanged(e)}
-            />
+            <SliderZoom onChange={(e) => handleZoomChanged(e)} />
           </Grid>
 
           <Grid xs={12}>
             <SliderRatio
-              imageSettings={imageSettings}
               onSliderChange={(e) => handleImageSettingsChanged(e, "ratio")}
               onRotateClick={handleOrientationChange}
             />

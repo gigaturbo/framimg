@@ -1,3 +1,4 @@
+import React, { useCallback, useMemo } from "react";
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ImageIcon from "@mui/icons-material/Image";
@@ -5,23 +6,28 @@ import LineWeightIcon from "@mui/icons-material/LineWeight";
 import MenuIcon from "@mui/icons-material/Menu";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import CropRotateIcon from "@mui/icons-material/CropRotate";
+import Container from "@mui/material/Container";
+import TuneIcon from "@mui/icons-material/Tune";
+import PaletteIcon from "@mui/icons-material/Palette";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import { styled } from "@mui/material/styles";
 import { RemoveScroll } from "react-remove-scroll";
 import PixiCanvas from "./pixi_canvas.jsx";
-import { useCallback, useMemo } from "react";
+import { useImageSettings } from "./providers";
 
-export function MainAppBar({ loadButton, downloadButton }) {
+export function MainAppBar({ onImageLoad, onImageExport, isImageLoading }) {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
           <IconButton
             size="large"
             edge="start"
@@ -34,26 +40,23 @@ export function MainAppBar({ loadButton, downloadButton }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Framimg
           </Typography>
-          {loadButton}
-          {downloadButton}
+          <ImageInputButton loading={isImageLoading} onChange={onImageLoad} />
+          <ImageDownloadButton
+            disabled={isImageLoading}
+            onClick={onImageExport}
+          />
         </Toolbar>
-      </AppBar>
-    </Box>
+      </Container>
+    </AppBar>
   );
 }
 
-export function InteractiveImageViewer({
-  image,
-  imageSettings,
-  canvasSize,
-  onImageDrag,
-}) {
+export function InteractiveImageViewer({ image, canvasSize, onImageDrag }) {
   if (image != null) {
     return (
       <RemoveScroll allowPinchZoom={false}>
         <PixiCanvas
           image={image}
-          imageSettings={imageSettings}
           canvasSize={canvasSize}
           onImageDrag={onImageDrag}
         />
@@ -64,7 +67,9 @@ export function InteractiveImageViewer({
   }
 }
 
-export function SliderRatio({ imageSettings, onSliderChange, onRotateClick }) {
+export function SliderRatio({ onSliderChange, onRotateClick }) {
+  const { imageSettings, setImageSettings } = useImageSettings();
+
   const allowedRatios = useMemo(() => {
     return [
       [1, 1],
@@ -128,7 +133,8 @@ export function SliderRatio({ imageSettings, onSliderChange, onRotateClick }) {
   );
 }
 
-export function SliderBorderSize({ imageSettings, onChange }) {
+export function SliderBorderSize({ onChange }) {
+  const { imageSettings, setImageSettings } = useImageSettings();
   const valueBorderFormat = useCallback((value) => `${value.toFixed(0)}%`, []);
 
   return (
@@ -153,7 +159,8 @@ export function SliderBorderSize({ imageSettings, onChange }) {
   );
 }
 
-export function SliderZoom({ imageSettings, onChange }) {
+export function SliderZoom({ onChange }) {
+  const { imageSettings, setImageSettings } = useImageSettings();
   const valueZoomFormat = useCallback(
     (value) => `${(value * 100).toFixed(0)}%`,
     [],
@@ -204,6 +211,22 @@ export function ImageDownloadButton({ disabled, onClick }) {
     >
       <FileDownloadIcon />
     </IconButton>
+  );
+}
+
+export function ControlsTabs() {
+  const [value, setValue] = useState(0);
+
+  const handleChange = (e, nv) => {
+    setValue(nv);
+  };
+
+  return (
+    <Tabs value={value} onChange={handleChange} aria-label="Controls tabs">
+      <Tab icon={<TuneIcon />} aria-label="Image tuning" />
+      <Tab icon={<PaletteIcon />} aria-label="Colors tuning" />
+      <Tab icon={<ImportExportIcon />} aria-label="Export tuning" />
+    </Tabs>
   );
 }
 

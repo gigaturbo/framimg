@@ -6,7 +6,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./app";
 import { settings } from "pixi.js";
-import { AppSettingsProvider } from "./app_settings";
+import { AppSettingsProvider, ImageSettingsProvider } from "./providers";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -34,7 +34,9 @@ root.render(
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <AppSettingsProvider>
-          <App />
+          <ImageSettingsProvider>
+            <App />
+          </ImageSettingsProvider>
         </AppSettingsProvider>
       </ThemeProvider>
     </NoSsr>

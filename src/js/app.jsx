@@ -1,7 +1,13 @@
 import { Box, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Image } from "image-js";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from "react";
 import {
   ImageDownloadButton,
   ImageInputButton,
@@ -11,6 +17,7 @@ import {
   SliderRatio,
   SliderZoom,
 } from "./components";
+import { useAppSettings } from "./app_settings";
 import { calcParams } from "./utils";
 import * as PIXI from "pixi.js";
 
@@ -46,6 +53,8 @@ export function App() {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
+  const { appSettings } = useAppSettings();
 
   // Canvas size
   useEffect(() => {
@@ -84,6 +93,7 @@ export function App() {
 
   // Settings changed
   const handleImageSettingsChanged = (e, keyToUpdate) => {
+    console.log(appSettings);
     let settings = { ...imageSettings };
     settings[keyToUpdate] = e.target.value;
     setImageSettings(settings);
@@ -104,7 +114,7 @@ export function App() {
     setImageSettings(nSettings);
   };
 
-  const handleOrientatioChange = (e) => {
+  const handleOrientationChange = (e) => {
     let nSettings = { ...imageSettings };
     nSettings.orientation =
       nSettings.orientation == "LANDSCAPE" ? "PORTRAIT" : "LANDSCAPE";
@@ -113,13 +123,18 @@ export function App() {
   };
 
   const handleExportImage = useCallback(async () => {
-    console.log("Export function");
-    const { pad, cW, cH, dW, dH, px, py } = calcParams(image, imageSettings, {
+    const fakeSize = {
       w: parseInt(image.width / imageSettings.zoom), // TODO compute real needed width here!
-      h: 0,
-    });
+      h: parseInt(image.width / imageSettings.ratio / imageSettings.zoom),
+    };
+
+    const { pad, cW, cH, dW, dH, px, py } = calcParams(
+      image,
+      imageSettings,
+      fakeSize,
+    );
+
     const app = new PIXI.Application({
-      background: "#FFFF00",
       width: cW,
       height: cH,
     });
@@ -137,6 +152,12 @@ export function App() {
     container.pivot.y = cH / 2;
     container.mask = mask;
 
+    const background = new PIXI.Graphics();
+    background.beginFill(appSettings.image.backgroundColor, 1);
+    background.drawRect(0, 0, cW, cH);
+    background.endFill();
+    container.addChild(background);
+
     const photo = PIXI.Sprite.from(image.dataURL);
     container.addChild(photo);
     photo.anchor.set(0.5);
@@ -146,8 +167,7 @@ export function App() {
     photo.height = dH;
 
     const frame = new PIXI.Graphics();
-    photo.anchor.set(0.5);
-    frame.beginFill(0xffffff, 1);
+    frame.beginFill(appSettings.image.borderColor, 1);
     frame.drawRect(0, 0, cW, pad);
     frame.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
     frame.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
@@ -160,8 +180,8 @@ export function App() {
 
     const outputImage = await app.renderer.extract.image(
       container,
-      "image/jpeg",
-      0.97,
+      appSettings.export.type,
+      appSettings.export.quality,
       frame.getBounds(),
     );
     const link = document.createElement("a");
@@ -184,7 +204,7 @@ export function App() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        backgroundColor: "#777777",
+        backgroundColor: appSettings.ui.backgroundColor,
       }}
     >
       {/* APP BAR */}
@@ -211,7 +231,7 @@ export function App() {
       <Container
         ref={canvasGridContainerRef}
         sx={{
-          backgroundColor: "#9999FF",
+          backgroundColor: "#9999FF", // tmp. for debug
           display: "flex",
           flexDirection: "column",
           height: "100vh",
@@ -250,7 +270,7 @@ export function App() {
             <SliderRatio
               imageSettings={imageSettings}
               onSliderChange={(e) => handleImageSettingsChanged(e, "ratio")}
-              onRotateClick={handleOrientatioChange}
+              onRotateClick={handleOrientationChange}
             />
           </Grid>
         </Grid>

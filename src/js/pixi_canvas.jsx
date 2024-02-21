@@ -2,6 +2,7 @@ import { Box, Container } from "@mui/material";
 import { Graphics, Sprite, Stage } from "@pixi/react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { calcParams } from "./utils";
+import { useAppSettings } from "./app_settings";
 
 export default function PixiCanvas({
   image,
@@ -19,10 +20,12 @@ export default function PixiCanvas({
   const mouseInitialPosition = useRef(null);
   const previousTranslation = useRef({ x: 0, y: 0 });
 
+  const { appSettings } = useAppSettings();
+
   const draw = useCallback(
     (g) => {
       g.clear();
-      g.beginFill(0xffffff, 1);
+      g.beginFill(appSettings.image.borderColor, 1);
       g.drawRect(0, 0, cW, pad);
       g.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
       g.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
@@ -89,14 +92,18 @@ export default function PixiCanvas({
       <Container
         ref={touchBoxRef}
         sx={{
-          backgroundColor: "#FF9999",
+          backgroundColor: "#FF9999", // tmp. for debug
           width: "min-content",
           height: "min-content",
         }}
         disableGutters
         pointerEvents={"auto"}
       >
-        <Stage width={cW} height={cH} options={{ backgroundColor: 0xffffff }}>
+        <Stage
+          width={cW}
+          height={cH}
+          options={{ backgroundColor: appSettings.image.backgroundColor }}
+        >
           <Sprite
             image={image.dataURL}
             width={dW}

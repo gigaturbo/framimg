@@ -40,6 +40,8 @@ d = (b\*cW)/2(1-b)
 - https://developer.mozilla.org/en-US/docs/Web/API/Element/pointercancel_event
 - https://github.com/w3c/pointerevents/issues/346
 - https://pixijs.io/pixi-react/components/TilingSprite/
+- https://mortenbarklund.com/blog/react-architecture-provider-pattern/
+- 
 
 ### TODO
 

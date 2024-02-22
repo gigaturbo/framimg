@@ -32,13 +32,15 @@ export default function PixiCanvas({ image, canvasSize }) {
   );
 
   useEffect(() => {
-    touchBoxRef.current.onpointermove = handleMouseMove;
-    touchBoxRef.current.onpointerdown = handleMouseDown;
-    touchBoxRef.current.onpointerup = handleMouseUpOrLeave;
-    touchBoxRef.current.onpointerout = handleMouseUpOrLeave;
-    touchBoxRef.current.onpointerleave = handleMouseUpOrLeave;
-    touchBoxRef.current.onpointercancel = handleMouseUpOrLeave;
-  }, []); // image, imageSettings, canvasSize
+    if (touchBoxRef.current) {
+      touchBoxRef.current.onpointermove = handleMouseMove;
+      touchBoxRef.current.onpointerdown = handleMouseDown;
+      touchBoxRef.current.onpointerup = handleMouseUpOrLeave;
+      touchBoxRef.current.onpointerout = handleMouseUpOrLeave;
+      touchBoxRef.current.onpointerleave = handleMouseUpOrLeave;
+      touchBoxRef.current.onpointercancel = handleMouseUpOrLeave;
+    }
+  }, [image, imageSettings, canvasSize]);
 
   function handleMouseMove(e) {
     if (

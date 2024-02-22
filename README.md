@@ -45,6 +45,9 @@ d = (b\*cW)/2(1-b)
 
 ### TODO
 
+- [ ] fix export translation
+- [ ] fix donwload button
+- [ ] fix border size (fill outside)
 - [x] min max slider ratio
 - [ ] max image height
 - [ ] max width on large display

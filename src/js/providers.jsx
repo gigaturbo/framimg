@@ -44,16 +44,11 @@ const DEFAULT_IMG_SETTINGS = {
 const ImageSettings = createContext({ ...DEFAULT_IMG_SETTINGS });
 
 export function ImageSettingsProvider({ children }) {
-  // const [imageSettings, setImageSettings] = useState({
-  //   ...DEFAULT_IMG_SETTINGS,
-  // });
-
   const [imageSettings, imageSettingsDispatch] = useReducer(
     imageSettingsReducer,
     { ...DEFAULT_IMG_SETTINGS },
   );
 
-  // const value = { imageSettings, setImageSettings };
   const value = { imageSettings, imageSettingsDispatch };
 
   return (
@@ -61,7 +56,6 @@ export function ImageSettingsProvider({ children }) {
   );
 }
 
-// Context consumer hook
 export function useImageSettings() {
   return useContext(ImageSettings);
 }

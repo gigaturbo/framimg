@@ -39,9 +39,9 @@ export function App() {
 
   // Canvas size
   useEffect(() => {
-    const w = canvasGridContainerRef.current.offsetWidth;
-    const h = canvasGridContainerRef.current.offsetHeight;
     if (canvasGridContainerRef.current) {
+      const w = canvasGridContainerRef.current.offsetWidth;
+      const h = canvasGridContainerRef.current.offsetHeight;
       console.log(`Set size ${w} ${h}`);
       setCanvasSize({ w: w, h: h });
     }
@@ -92,17 +92,17 @@ export function App() {
 
     const container = new PIXI.Container();
     app.stage.addChild(container);
-    container.x = cW / 2;
-    container.y = cH / 2;
-    container.pivot.x = cW / 2;
-    container.pivot.y = cH / 2;
+    // container.x = cW / 2;
+    // container.y = cH / 2;
+    // container.pivot.x = cW / 2;
+    // container.pivot.y = cH / 2;
     container.mask = mask;
 
     const background = new PIXI.Graphics();
+    container.addChild(background);
     background.beginFill(appSettings.image.backgroundColor, 1);
     background.drawRect(0, 0, cW, cH);
     background.endFill();
-    container.addChild(background);
 
     const photo = PIXI.Sprite.from(image.dataURL);
     container.addChild(photo);
@@ -113,13 +113,15 @@ export function App() {
     photo.height = dH;
 
     const frame = new PIXI.Graphics();
+    container.addChild(frame);
     frame.beginFill(appSettings.image.borderColor, 1);
     frame.drawRect(0, 0, cW, pad);
     frame.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
     frame.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
     frame.drawRect(cW - pad, pad, pad, cW / imageSettings.ratio - 2 * pad);
     frame.endFill();
-    container.addChild(frame);
+
+    console.log(frame);
 
     container.getBounds();
     frame.getBounds();

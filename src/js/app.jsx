@@ -13,7 +13,7 @@ import { calcParams } from "./utils";
 import * as PIXI from "pixi.js";
 
 export function App() {
-  const [canvasSize, setCanvasSize] = useState({ w: 0, h: 0 });
+  const [maxSize, setMaxSize] = useState({ w: 0, h: 0 });
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [image, setImage] = useState(null);
   const { imageSettings, imageSettingsDispatch } = useImageSettings();
@@ -28,7 +28,7 @@ export function App() {
       const w = canvasGridContainerRef.current.offsetWidth;
       const h = canvasGridContainerRef.current.offsetHeight;
       console.log(`Resize window ${w} ${h}`);
-      setCanvasSize({ w: w, h: h });
+      setMaxSize({ w: w, h: h });
     }
     window.addEventListener("resize", handleWindowResize);
     handleWindowResize();
@@ -43,7 +43,7 @@ export function App() {
       const w = canvasGridContainerRef.current.offsetWidth;
       const h = canvasGridContainerRef.current.offsetHeight;
       console.log(`Set size ${w} ${h}`);
-      setCanvasSize({ w: w, h: h });
+      setMaxSize({ w: w, h: h });
     }
   }, [canvasGridContainerRef.current]);
 
@@ -180,7 +180,7 @@ export function App() {
         disableGutters
         fixed
       >
-        <InteractiveImageViewer image={image} canvasSize={canvasSize} />
+        <InteractiveImageViewer image={image} maxSize={maxSize} />
       </Container>
 
       {/* BUTTONS */}

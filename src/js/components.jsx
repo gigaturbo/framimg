@@ -51,11 +51,11 @@ export function MainAppBar({ onImageLoad, onImageExport, isImageLoading }) {
   );
 }
 
-export function InteractiveImageViewer({ image, canvasSize }) {
+export function InteractiveImageViewer({ image, maxSize }) {
   if (image != null) {
     return (
       <RemoveScroll allowPinchZoom={false}>
-        <PixiCanvas image={image} canvasSize={canvasSize} />
+        <PixiCanvas image={image} maxSize={maxSize} />
       </RemoveScroll>
     );
   } else {

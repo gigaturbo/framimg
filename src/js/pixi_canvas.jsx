@@ -4,13 +4,13 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { calcParams } from "./utils";
 import { useAppSettings, useImageSettings } from "./providers";
 
-export default function PixiCanvas({ image, canvasSize }) {
+export default function PixiCanvas({ image, maxSize }) {
   const { imageSettings, imageSettingsDispatch } = useImageSettings();
   const { appSettings } = useAppSettings();
 
   const { pad, cW, cH, dW, dH, px, py, mtx, mty } = useMemo(
-    () => calcParams(image, imageSettings, canvasSize),
-    [image, imageSettings, canvasSize],
+    () => calcParams(image, imageSettings, maxSize),
+    [image, imageSettings, maxSize],
   );
 
   const touchBoxRef = useRef(null);
@@ -28,7 +28,7 @@ export default function PixiCanvas({ image, canvasSize }) {
       g.drawRect(cW - pad, pad, pad, cW / imageSettings.ratio - 2 * pad);
       g.endFill();
     },
-    [image, imageSettings, canvasSize],
+    [image, imageSettings, maxSize],
   );
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function PixiCanvas({ image, canvasSize }) {
       touchBoxRef.current.onpointerleave = handleMouseUpOrLeave;
       touchBoxRef.current.onpointercancel = handleMouseUpOrLeave;
     }
-  }, [image, imageSettings, canvasSize]);
+  }, [image, imageSettings, maxSize]);
 
   function handleMouseMove(e) {
     if (
@@ -49,7 +49,7 @@ export default function PixiCanvas({ image, canvasSize }) {
       e.buttons === 1 &&
       isMouseDown.current
     ) {
-      const { ctx, cty } = getTranslation(e.offsetX, e.offsetY);
+      const { ctx, cty } = getTranslation(e.offsetX / cW, e.offsetY / cH);
       imageSettingsDispatch({
         type: "image_translated",
         newvalue: { x: ctx, y: cty },
@@ -60,7 +60,7 @@ export default function PixiCanvas({ image, canvasSize }) {
   function handleMouseUpOrLeave(e) {
     if (touchBoxRef.current && mouseInitialPosition.current) {
       isMouseDown.current = false;
-      const { ctx, cty } = getTranslation(e.offsetX, e.offsetY);
+      const { ctx, cty } = getTranslation(e.offsetX / cW, e.offsetY / cH);
       previousTranslation.current.x = ctx;
       previousTranslation.current.y = cty;
       mouseInitialPosition.current = null;
@@ -74,7 +74,7 @@ export default function PixiCanvas({ image, canvasSize }) {
   function handleMouseDown(e) {
     if (touchBoxRef.current && e.buttons === 1 && !isMouseDown.current) {
       isMouseDown.current = true;
-      mouseInitialPosition.current = { x: e.offsetX, y: e.offsetY };
+      mouseInitialPosition.current = { x: e.offsetX / cW, y: e.offsetY / cH };
     }
   }
 

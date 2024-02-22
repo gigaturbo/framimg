@@ -92,10 +92,6 @@ export function App() {
 
     const container = new PIXI.Container();
     app.stage.addChild(container);
-    // container.x = cW / 2;
-    // container.y = cH / 2;
-    // container.pivot.x = cW / 2;
-    // container.pivot.y = cH / 2;
     container.mask = mask;
 
     const background = new PIXI.Graphics();
@@ -120,8 +116,6 @@ export function App() {
     frame.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
     frame.drawRect(cW - pad, pad, pad, cW / imageSettings.ratio - 2 * pad);
     frame.endFill();
-
-    console.log(frame);
 
     container.getBounds();
     frame.getBounds();
@@ -162,6 +156,7 @@ export function App() {
             onImageExport={handleExportImage}
             onImageLoad={handleFileChange}
             isImageLoading={isImageLoading}
+            disableDownload={image === null}
           />
         </Grid>
       </Grid>
@@ -170,7 +165,7 @@ export function App() {
       <Container
         ref={canvasGridContainerRef}
         sx={{
-          backgroundColor: "#9999FF", // tmp. for debug
+          // backgroundColor: "#9999FF", // tmp. for debug
           display: "flex",
           flexDirection: "column",
           height: "100vh",

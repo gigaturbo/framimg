@@ -23,7 +23,12 @@ import { RemoveScroll } from "react-remove-scroll";
 import PixiCanvas from "./pixi_canvas.jsx";
 import { useImageSettings } from "./providers";
 
-export function MainAppBar({ onImageLoad, onImageExport, isImageLoading }) {
+export function MainAppBar({
+  onImageLoad,
+  onImageExport,
+  isImageLoading,
+  disableDownload,
+}) {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -42,7 +47,7 @@ export function MainAppBar({ onImageLoad, onImageExport, isImageLoading }) {
           </Typography>
           <ImageInputButton loading={isImageLoading} onChange={onImageLoad} />
           <ImageDownloadButton
-            disabled={isImageLoading}
+            disabled={disableDownload}
             onClick={onImageExport}
           />
         </Toolbar>

@@ -8,6 +8,7 @@ import { MainAppBar } from "./components";
 import { SliderBorderSize } from "./components";
 import { SliderRatio } from "./components";
 import { SliderZoom } from "./components";
+import { ControlsTabs } from "./components";
 import { useAppSettings, useImageSettings } from "./providers";
 import { calcParams } from "./utils";
 import * as PIXI from "pixi.js";
@@ -96,7 +97,10 @@ export function App() {
 
     const background = new PIXI.Graphics();
     container.addChild(background);
-    background.beginFill(appSettings.image.backgroundColor, 1);
+    background.beginFill(
+      imageSettings.backgroundColor,
+      imageSettings.backgroundAlpha,
+    );
     background.drawRect(0, 0, cW, cH);
     background.endFill();
 
@@ -110,7 +114,7 @@ export function App() {
 
     const frame = new PIXI.Graphics();
     container.addChild(frame);
-    frame.beginFill(appSettings.image.borderColor, 1);
+    frame.beginFill(imageSettings.borderColor, imageSettings.borderAlpha);
     frame.drawRect(0, 0, cW, pad);
     frame.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
     frame.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
@@ -160,7 +164,6 @@ export function App() {
           />
         </Grid>
       </Grid>
-
       {/* CANVAS */}
       <Container
         ref={canvasGridContainerRef}
@@ -168,7 +171,7 @@ export function App() {
           // backgroundColor: "#9999FF", // tmp. for debug
           display: "flex",
           flexDirection: "column",
-          height: "100vh",
+          height: "73vh",
           mx: "auto",
         }}
         maxWidth="sm"
@@ -177,23 +180,25 @@ export function App() {
       >
         <InteractiveImageViewer image={image} maxSize={maxSize} />
       </Container>
-
-      {/* BUTTONS */}
-      <Grid xs={12} container spacing={2}>
-        <Grid xs={12} container sx={{ px: "1.5rem", py: "2rem" }}>
-          <Grid xs={12}>
-            <SliderBorderSize />
-          </Grid>
-
-          <Grid xs={12}>
-            <SliderZoom />
-          </Grid>
-
-          <Grid xs={12}>
-            <SliderRatio />
-          </Grid>
-        </Grid>
-      </Grid>
+      {/* SPACER */}
+      <Container
+        sx={{
+          // backgroundColor: "#99ff99", // tmp. for debug
+          display: "flex",
+          flexDirection: "column",
+          height: "2vh",
+          mx: "auto",
+        }}
+      ></Container>
+      {/* EXP TABS */}
+      <ControlsTabs
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "25vh",
+          mx: "auto",
+        }}
+      ></ControlsTabs>
     </Box>
   );
 }

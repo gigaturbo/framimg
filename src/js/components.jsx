@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ImageIcon from "@mui/icons-material/Image";
@@ -7,6 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import CropRotateIcon from "@mui/icons-material/CropRotate";
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Unstable_Grid2";
 import TuneIcon from "@mui/icons-material/Tune";
 import PaletteIcon from "@mui/icons-material/Palette";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
@@ -235,19 +236,53 @@ export function ImageDownloadButton({ disabled, onClick }) {
   );
 }
 
+function ControlsTabTuning() {
+  return (
+    <>
+      <Grid xs={12}>
+        <SliderBorderSize />
+      </Grid>
+      <Grid xs={12}>
+        <SliderZoom />
+      </Grid>
+      <Grid xs={12}>
+        <SliderRatio />
+      </Grid>
+    </>
+  );
+}
+
 export function ControlsTabs() {
   const [value, setValue] = useState(0);
 
   const handleChange = (e, nv) => {
     setValue(nv);
+    console.log(`switched to  ${nv}`);
   };
 
   return (
-    <Tabs value={value} onChange={handleChange} aria-label="Controls tabs">
-      <Tab icon={<TuneIcon />} aria-label="Image tuning" />
-      <Tab icon={<PaletteIcon />} aria-label="Colors tuning" />
-      <Tab icon={<ImportExportIcon />} aria-label="Export tuning" />
-    </Tabs>
+    <Container
+      maxWidth="sm"
+      sx={{
+        mb: 2,
+        //  backgroundColor: "#99ffff"
+      }}
+      fixed
+    >
+      <Grid xs={12} container spacing={1}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="Controls tabs"
+          sx={{ mb: 2 }}
+        >
+          <Tab icon={<TuneIcon />} aria-label="Image tuning" />
+          <Tab icon={<PaletteIcon />} aria-label="Colors tuning" />
+          <Tab icon={<ImportExportIcon />} aria-label="Export tuning" />
+        </Tabs>
+        {value === 0 ? <ControlsTabTuning /> : <></>}
+      </Grid>
+    </Container>
   );
 }
 

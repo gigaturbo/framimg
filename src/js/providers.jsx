@@ -5,12 +5,6 @@ import { createContext, useState, useContext, useReducer } from "react";
 const DEFAULT_APP_SETTINGS = {
   export: { quality: 97, type: "image/png" },
   render: { roundPixels: true, antialias: false, autoDensity: true },
-  image: {
-    // Move to imageSettings
-    borderColor: 0xffffff,
-    backgroundColor: 0xffffff,
-    backgroundAlpha: 1,
-  },
   ui: { backgroundColor: "#6b6b6b" },
 };
 
@@ -39,6 +33,10 @@ const DEFAULT_IMG_SETTINGS = {
   ratioMode: "OUTPUT_RATIO",
   orientation: "LANDSCAPE",
   translation: { x: 0, y: 0 },
+  borderColor: 0xffffff,
+  backgroundColor: 0xffffff,
+  backgroundAlpha: 1,
+  borderAlpha: 1,
 };
 
 const ImageSettings = createContext({ ...DEFAULT_IMG_SETTINGS });

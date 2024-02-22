@@ -41,23 +41,23 @@ d = (b\*cW)/2(1-b)
 - https://github.com/w3c/pointerevents/issues/346
 - https://pixijs.io/pixi-react/components/TilingSprite/
 - https://mortenbarklund.com/blog/react-architecture-provider-pattern/
-- 
+
 
 ### TODO
 
-- [ ] fix export translation
-- [ ] fix donwload button
-- [ ] fix border size (fill outside)
+- [x] fix export translation
+- [x] fix donwload button
 - [x] min max slider ratio
+- [x] fast image loading
+- [ ] fix border size (fill outside)
 - [ ] max image height
 - [ ] max width on large display
 - [ ] UI change on large display?
-- [x] fast image loading
 - [ ] load image without dataURL
 - [ ] exported image name and exif data
-- [ ] configurable export format (png, jpeg, quality, resizeif, )
+- [ ] configurable export format (png, jpeg, quality, resizeif)
 - [ ] image export method (interpolation, roundpixels, size, etc)
 - [ ] configure innerRatio/real image ratio
-- [ ] pinch to zoom?
+- [ ] pinch to zoom + keys/scroll?
 - [ ] set slider exact value on click
-- [ ] even slider ratio scaling (1/x scale)?
+- [ ] slider ratio scaling (1/x scale)?

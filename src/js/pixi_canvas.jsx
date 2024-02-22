@@ -21,7 +21,7 @@ export default function PixiCanvas({ image, maxSize }) {
   const draw = useCallback(
     (g) => {
       g.clear();
-      g.beginFill(appSettings.image.borderColor, 1);
+      g.beginFill(imageSettings.borderColor, imageSettings.borderAlpha);
       g.drawRect(0, 0, cW, pad);
       g.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
       g.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
@@ -106,7 +106,10 @@ export default function PixiCanvas({ image, maxSize }) {
         <Stage
           width={cW}
           height={cH}
-          options={{ backgroundColor: appSettings.image.backgroundColor }}
+          options={{
+            backgroundColor: imageSettings.backgroundColor,
+            backgroundAlpha: imageSettings.backgroundAlpha,
+          }}
         >
           <Sprite
             image={image.dataURL}

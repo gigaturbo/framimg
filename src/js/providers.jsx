@@ -11,7 +11,7 @@ const DEFAULT_APP_SETTINGS = {
     backgroundColor: 0xffffff,
     backgroundAlpha: 1,
   },
-  ui: { backgroundColor: "#777777" },
+  ui: { backgroundColor: "#6b6b6b" },
 };
 
 // Context with default settings

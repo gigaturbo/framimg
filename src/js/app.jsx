@@ -168,7 +168,7 @@ export function App() {
           // backgroundColor: "#9999FF", // tmp. for debug
           display: "flex",
           flexDirection: "column",
-          height: "73vh",
+          height: "60vh",
           mx: "auto",
         }}
         maxWidth="sm"
@@ -192,8 +192,9 @@ export function App() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "25vh",
+          minHeight: "38vh",
           mx: "auto",
+          display: "fixed",
         }}
       ></ControlsTabs>
     </Box>

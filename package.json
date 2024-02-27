@@ -54,6 +54,7 @@
     "@pixi/text-bitmap": "^7.4.0",
     "@pixi/ticker": "^7.4.0",
     "image-js": "^0.35.5",
+    "mui-color-input": "^2.0.3",
     "mui-file-input": "^4.0.3",
     "pixi.js": "^7.4.0",
     "prop-types": "^15.8.1",

@@ -41,7 +41,8 @@ d = (b\*cW)/2(1-b)
 - https://github.com/w3c/pointerevents/issues/346
 - https://pixijs.io/pixi-react/components/TilingSprite/
 - https://mortenbarklund.com/blog/react-architecture-provider-pattern/
-
+- https://in-your-saas.github.io/material-ui-theme-editor/
+- https://github.com/scttcper/tinycolor#accepted-string-input
 
 ### TODO
 

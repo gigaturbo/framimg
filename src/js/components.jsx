@@ -25,6 +25,7 @@ import Typography from "@mui/material/Typography";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import { styled } from "@mui/material/styles";
+import { MuiColorInput } from "mui-color-input";
 import { RemoveScroll } from "react-remove-scroll";
 import PixiCanvas from "./pixi_canvas.jsx";
 import { useAppSettings, useImageSettings } from "./providers";
@@ -117,12 +118,13 @@ export function SliderRatio() {
 
   return (
     <Stack spacing={2} direction="row" sx={{ mb: 2 }} alignItems="center">
-      <AspectRatioIcon />
+      <AspectRatioIcon color="action" />
       <Slider
         defaultValue={1.0}
         min={minV}
         max={maxV}
         step={null}
+        size="medium"
         marks={ratioMarks}
         aria-label="Default"
         valueLabelDisplay="auto"
@@ -157,13 +159,14 @@ export function SliderBorderSize() {
 
   return (
     <Stack spacing={2} direction="row" sx={{ mb: 0.2 }} alignItems="center">
-      <LineWeightIcon />
+      <LineWeightIcon color="action" />
       <Slider
         defaultValue={0}
         min={0}
         max={50}
         step={1}
         marks
+        size="medium"
         aria-label="Default"
         valueLabelDisplay="auto"
         value={imageSettings.borderSize}
@@ -191,13 +194,14 @@ export function SliderZoom() {
   );
 
   return (
-    <Stack spacing={2} direction="row" sx={{ mb: 0.2 }}>
-      <ZoomInIcon />
+    <Stack spacing={2} direction="row" sx={{ mb: 0.2 }} alignItems="center">
+      <ZoomInIcon color="action" />
       <Slider
         defaultValue={1}
         min={1}
         max={3}
         step={0.01}
+        size="medium"
         aria-label="Default"
         valueLabelDisplay="auto"
         value={imageSettings.zoom}
@@ -255,7 +259,7 @@ const ToggleImageExportTypeButton = () => {
               max={100}
               step={1}
               value={appSettings.export.quality}
-              valueLabelDisplay="auto"
+              valueLabelDisplay="on"
               valueLabelFormat={(v) => `quality: ${appSettings.export.quality}`}
               onChange={(e, nv) =>
                 appSettingsDispatch({
@@ -349,6 +353,26 @@ const ToggleAntialiasButton = () => {
   );
 };
 
+const BorderColorInput = () => {
+  const { imageSettings, imageSettingsDispatch } = useImageSettings();
+
+  return (
+    <>
+      <Typography gutterBottom>Border color</Typography>
+      <MuiColorInput
+        format="hex"
+        value={imageSettings.borderColor}
+        isAlphaHidden="true"
+        onChange={(c) =>
+          imageSettingsDispatch({ type: "border_color_changed", newvalue: c })
+        }
+        size="small"
+        fallbackValue="#ffffff"
+      />
+    </>
+  );
+};
+
 function ControlsTabTuning() {
   return (
     <>
@@ -366,7 +390,11 @@ function ControlsTabTuning() {
 }
 
 function ColorsTuningTab() {
-  return <></>;
+  return (
+    <>
+      <BorderColorInput />
+    </>
+  );
 }
 
 function ExportTuningTab() {
@@ -380,7 +408,7 @@ function ExportTuningTab() {
 }
 
 export function ControlsTabs() {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(0);
 
   const handleChange = (e, nv) => setValue(nv);
 

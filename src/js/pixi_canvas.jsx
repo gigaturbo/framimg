@@ -96,7 +96,7 @@ export default function PixiCanvas({ image, maxSize }) {
       <Container
         ref={touchBoxRef}
         sx={{
-          backgroundColor: "#FF9999", // tmp. for debug
+          // backgroundColor: "#FF9999", // tmp. for debug
           width: "min-content",
           height: "min-content",
         }}
@@ -109,6 +109,7 @@ export default function PixiCanvas({ image, maxSize }) {
           options={{
             backgroundColor: imageSettings.backgroundColor,
             backgroundAlpha: imageSettings.backgroundAlpha,
+            // TODO Add app settings here?
           }}
         >
           <Sprite

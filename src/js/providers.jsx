@@ -3,7 +3,7 @@ import { createContext, useState, useContext, useReducer } from "react";
 // ------------------------------------------------------------------------------------------------
 
 const DEFAULT_APP_SETTINGS = {
-  export: { quality: 97, type: "image/jpeg" },
+  export: { quality: 95, type: "image/jpeg" },
   render: { roundPixels: true, antialias: false, autoDensity: true },
   ui: { backgroundColor: "#6b6b6b" },
 };
@@ -59,7 +59,7 @@ const DEFAULT_IMG_SETTINGS = {
   ratioMode: "OUTPUT_RATIO",
   orientation: "LANDSCAPE",
   translation: { x: 0, y: 0 },
-  borderColor: 0xffffff,
+  borderColor: "#ffffff",
   backgroundColor: 0xffffff,
   backgroundAlpha: 1,
   borderAlpha: 1,
@@ -110,6 +110,9 @@ function imageSettingsReducer(state, action) {
       nState.zoom = 1;
       nState.translation = { x: 0, y: 0 };
       nState.angle = 0;
+      break;
+    case "border_color_changed":
+      nState.borderColor = action.newvalue;
       break;
   }
 

@@ -5,9 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { InteractiveImageViewer } from "./components";
 import { MainAppBar } from "./components";
-import { SliderBorderSize } from "./components";
-import { SliderRatio } from "./components";
-import { SliderZoom } from "./components";
 import { ControlsTabs } from "./components";
 import { useAppSettings, useImageSettings } from "./providers";
 import { calcParams } from "./utils";
@@ -18,7 +15,7 @@ export function App() {
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [image, setImage] = useState(null);
   const { imageSettings, imageSettingsDispatch } = useImageSettings();
-  const { appSettings } = useAppSettings();
+  const { appSettings, appSettingsDispatch } = useAppSettings();
   const canvasGridContainerRef = useRef(null);
 
   // EVENTS --------------------------------------------------------------------------------------
@@ -131,7 +128,7 @@ export function App() {
       frame.getBounds(),
     );
     const link = document.createElement("a");
-    const extension = "jpg";
+    const extension = appSettings.export.type.split("/")[1];
     const suffix = "_frame";
     link.href = outputImage.src;
     link.download = `${image.file.name.split(".").slice(0, -1).join(".")}${suffix}.${extension}`;

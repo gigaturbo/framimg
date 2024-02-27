@@ -6,7 +6,7 @@ import { useAppSettings, useImageSettings } from "./providers";
 
 export default function PixiCanvas({ image, maxSize }) {
   const { imageSettings, imageSettingsDispatch } = useImageSettings();
-  const { appSettings } = useAppSettings();
+  const { appSettings, appSettingsDispatch } = useAppSettings();
 
   const { pad, cW, cH, dW, dH, px, py, mtx, mty } = useMemo(
     () => calcParams(image, imageSettings, maxSize),

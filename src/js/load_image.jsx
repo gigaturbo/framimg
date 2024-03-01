@@ -1,15 +1,17 @@
 import Image from "image-js";
 
-self.onmessage = function (e) {
-  console.log("Worker received " + e.data);
-  if (e.data != null || typeof e !== "undefined") {
-    const reader = new FileReader();
-    reader.addEventListener("load", (event) => {
-      Image.load(event.target.result).then(function (i) {
-        console.log("Worker posted " + i.resize({ width: 256 }));
-        postMessage(i.resize({ width: 256 }));
-      });
-    });
-    reader.readAsDataURL(e.data);
-  }
+self.onmessage = (e) => {
+  const reader = new FileReader();
+  reader.onload = async (er) => {
+    const imgjs = await Image.load(er.target.result);
+    const image = {
+      imagejs: imgjs,
+      width: imgjs.width,
+      height: imgjs.height,
+      dataURL: er.target.result,
+      file: e.data,
+    };
+    self.postMessage(image);
+  };
+  reader.readAsDataURL(e.data);
 };

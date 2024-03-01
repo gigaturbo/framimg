@@ -21,6 +21,7 @@ import IconButton from "@mui/material/IconButton";
 import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -219,17 +220,21 @@ export function SliderZoom() {
 }
 
 export function ImageInputButton({ loading, onChange }) {
-  return (
-    <IconButton aria-label="load image" component="label">
-      <ImageIcon />
-      <VisuallyHiddenInput
-        type="file"
-        accept=".jpg, .jpeg, .png"
-        onChange={onChange}
-        disabled={loading}
-      />
-    </IconButton>
-  );
+  if (!loading) {
+    return (
+      <IconButton aria-label="load image" component="label" disabled={loading}>
+        <ImageIcon />
+        <VisuallyHiddenInput
+          type="file"
+          accept=".jpg, .jpeg, .png"
+          onChange={onChange}
+          disabled={loading}
+        />
+      </IconButton>
+    );
+  } else {
+    return <CircularProgress />;
+  }
 }
 
 export function ImageDownloadButton({ disabled, onClick }) {

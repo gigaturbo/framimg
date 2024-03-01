@@ -1,7 +1,13 @@
 import { Box, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Image } from "image-js";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 
 import { InteractiveImageViewer } from "./components";
 import { MainAppBar } from "./components";
@@ -19,6 +25,23 @@ export function App() {
   const canvasGridContainerRef = useRef(null);
 
   // EVENTS --------------------------------------------------------------------------------------
+
+  const wworker = useMemo(() => {
+    return new Worker(new URL("./load_image.jsx", import.meta.url), {
+      type: "module",
+    });
+  }, []);
+
+  useEffect(() => {
+    if (window.Worker) {
+      wworker.onmessage = (e) => {
+        const image = e.data;
+        imageSettingsDispatch({ type: "reset_settings" });
+        setImage(image);
+        setIsImageLoading(false);
+      };
+    }
+  }, [wworker]);
 
   // Window resize
   useEffect(() => {
@@ -46,24 +69,35 @@ export function App() {
   }, [canvasGridContainerRef.current]);
 
   // File change
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onload = async (er) => {
+  //     const imgjs = await Image.load(er.target.result);
+  //     const image = {
+  //       imagejs: imgjs,
+  //       width: imgjs.width,
+  //       height: imgjs.height,
+  //       dataURL: er.target.result,
+  //       file: file,
+  //     };
+  //     imageSettingsDispatch({ type: "reset_settings" });
+  //     setImage(image);
+  //     setIsImageLoading(false);
+  //     if (window.Worker) {
+  //       wworker.postMessage(file);
+  //     }
+  //   };
+  //   setIsImageLoading(true);
+  //   reader.readAsDataURL(file);
+  // };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = async (er) => {
-      const imgjs = await Image.load(er.target.result);
-      const image = {
-        imagejs: imgjs,
-        width: imgjs.width,
-        height: imgjs.height,
-        dataURL: er.target.result,
-        file: file,
-      };
-      imageSettingsDispatch({ type: "reset_settings" });
-      setImage(image);
-      setIsImageLoading(false);
-    };
-    setIsImageLoading(true);
-    reader.readAsDataURL(file);
+    if (window.Worker) {
+      setIsImageLoading(true);
+      wworker.postMessage(file);
+    }
   };
 
   const handleExportImage = useCallback(async () => {
@@ -113,7 +147,7 @@ export function App() {
     container.addChild(frame);
     frame.beginFill(imageSettings.borderColor, imageSettings.borderAlpha);
     frame.drawRect(0, 0, cW, pad);
-    frame.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
+    frame.drawRect(0, cW / imageSettings.ratio - pad, cW, pad + 1);
     frame.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
     frame.drawRect(cW - pad, pad, pad, cW / imageSettings.ratio - 2 * pad);
     frame.endFill();

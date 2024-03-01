@@ -19,14 +19,6 @@ settings.RENDER_OPTIONS.antialias = false; //SETTINGS.render.antialias;
 settings.RENDER_OPTIONS.autoDensity = true; //SETTINGS.render.autoDensity;
 settings.ROUND_PIXELS = true; //SETTINGS.render.roundPixels;
 
-// const theme = createTheme({
-//   palette: {
-//     primary: indigo,
-//     secondary: green,
-//     // mode: "dark",
-//   },
-// });
-
 const theme = createTheme({
   palette: {
     mode: "dark",
@@ -60,7 +52,7 @@ const theme = createTheme({
       hint: "rgba(255, 250, 250, 0.33)",
     },
   },
-  typography: { body1: { color: "#ffffff" } },
+  typography: { body1: { color: "#ffffff" }, body2: { color: "#ffffff" } },
 });
 
 const container = document.getElementById("root");

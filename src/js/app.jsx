@@ -68,30 +68,6 @@ export function App() {
     }
   }, [canvasGridContainerRef.current]);
 
-  // File change
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.onload = async (er) => {
-  //     const imgjs = await Image.load(er.target.result);
-  //     const image = {
-  //       imagejs: imgjs,
-  //       width: imgjs.width,
-  //       height: imgjs.height,
-  //       dataURL: er.target.result,
-  //       file: file,
-  //     };
-  //     imageSettingsDispatch({ type: "reset_settings" });
-  //     setImage(image);
-  //     setIsImageLoading(false);
-  //     if (window.Worker) {
-  //       wworker.postMessage(file);
-  //     }
-  //   };
-  //   setIsImageLoading(true);
-  //   reader.readAsDataURL(file);
-  // };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (window.Worker) {

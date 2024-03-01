@@ -23,7 +23,7 @@ export default function PixiCanvas({ image, maxSize }) {
       g.clear();
       g.beginFill(imageSettings.borderColor, imageSettings.borderAlpha);
       g.drawRect(0, 0, cW, pad);
-      g.drawRect(0, cW / imageSettings.ratio - pad, cW, pad);
+      g.drawRect(0, cW / imageSettings.ratio - pad, cW, pad + 1);
       g.drawRect(0, pad, pad, cW / imageSettings.ratio - 2 * pad);
       g.drawRect(cW - pad, pad, pad, cW / imageSettings.ratio - 2 * pad);
       g.endFill();
